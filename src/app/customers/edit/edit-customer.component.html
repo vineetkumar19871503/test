@@ -1,0 +1,157 @@
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="content-header">Update customer</div>
+  </div>
+</div>
+<!-- Addcustomer Form Validaton Starts -->
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-block">
+          <form [formGroup]="addcustomerForm" method="post" (ngSubmit)="oncustomerFormSubmit()" novalidate>
+            <h4 class="form-section"> Customer Details </h4>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="customerName">Company Name</label>
+                  <input type="text" class="form-control" placeholder="Customer Name" id="customerName" formControlName="org_name">
+                  <small class="form-text text-muted danger" *ngIf="!addcustomerForm.get('org_name').valid && (addcustomerForm.get('org_name').dirty || addcustomerForm.get('org_name').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="customerName">Company Id</label>
+                  <input type="text" class="form-control" placeholder="Customer id" id="customerid" formControlName="customer_id">
+                  <small class="form-text text-muted danger" *ngIf="!addcustomerForm.get('customer_id').disabled && !addcustomerForm.get('customer_id').valid && (addcustomerForm.get('customer_id').dirty || addcustomerForm.get('customer_id').touched)">Field is invalid</small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="org_address">Address</label>
+                  <textarea id="org_address" placeholder="org_address" formControlName="org_address" class="form-control" rows="3"> </textarea>
+                  <small class="danger" *ngIf="!addcustomerForm.get('org_address').valid && (addcustomerForm.get('org_address').dirty || addcustomerForm.get('org_address').touched)">Field is invalid</small>
+                </div>
+              </div>
+            </div>
+            <h4 class="form-section"> Contact</h4>
+            <div class=" form-group row">
+              <div class="col-md-12">
+                <section id="light">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="card">
+                        <div class="card-body">
+                          <div>
+                            <button type="buttton" (click)="_addQuaryContactRow($event)" class="btn btn-success btn-raised">Add Contact</button>
+                          </div>
+                          <div class="card-block">
+                            <table class="table">
+                              <thead class="thead-default">
+                                <tr>
+                                  <th>Name</th>
+                                  <th>Phone</th>
+                                  <th>Email</th>
+                                  <th>Description</th>
+                                </tr>
+                              </thead>
+                              <tbody formArrayName="contact_details">
+                                <tr *ngFor="let prop of addcustomerForm.get('contact_details').controls; let i = index;">
+                                  <ng-container [formGroupName]="i">
+                                    <td>
+                                      <input type="text" formControlName="name" class="form-control" placeholder="name">
+                                      <small class="form-text text-muted danger" *ngIf="!addcustomerForm.get('contact_details').at(i).get('name').valid && (addcustomerForm.get('contact_details').at(i).get('name').dirty || addcustomerForm.get('contact_details').at(i).get('name').touched)">
+                                        Field is invalid
+                                      </small>
+                                    </td>
+                                    <td>
+                                      <input type="text" formControlName="phone" minlength=10  class="form-control" placeholder="phone">
+                                      <small class="form-text text-muted danger" *ngIf="!addcustomerForm.get('contact_details').at(i).get('phone').valid && (addcustomerForm.get('contact_details').at(i).get('phone').dirty || addcustomerForm.get('contact_details').at(i).get('phone').touched)">
+                                        Field is invalid
+                                      </small>
+                                    </td> 
+                                    <td>
+                                      <input type="email" id="contactemail" email formControlName="email" class="form-control" placeholder="email">
+                                      <small class="form-text text-muted danger" *ngIf="!addcustomerForm.get('contact_details').at(i).get('email').valid && (addcustomerForm.get('contact_details').at(i).get('email').dirty || addcustomerForm.get('contact_details').at(i).get('email').touched)">
+                                        Field is invalid
+                                      </small>
+                                    </td>
+                                    <td>
+                                      <input type="text" formControlName="description" class="form-control" placeholder="">
+                                      <small class="form-text text-muted danger" *ngIf="!addcustomerForm.get('contact_details').at(i).get('description').valid && (addcustomerForm.get('contact_details').at(i).get('description').dirty || addcustomerForm.get('contact_details').at(i).get('description').touched)">
+                                        Field is invalid
+                                      </small>
+                                    </td>
+                                  </ng-container>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group" [formGroup]="addcustomerForm.get('cust_logs')">
+                  <input type="hidden" formControlName="name">
+                  <label for="customerName">Notes</label>
+                  <textarea id="cust_notes" placeholder="Notes" formControlName="notes" class="form-control" rows="3"> </textarea>
+                  <small class="form-text text-muted danger" *ngIf="!addcustomerForm.get('cust_logs').get('notes').valid && (addcustomerForm.get('cust_logs').get('notes').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="chat-application" style="max-height: 300px; overflow:auto">
+                  <label for="customerName">Customer Logs</label>
+                  <!-- <div class="custLogs" *ngFor="let custLog of custLogData;">
+                    {{custLog.notes}}
+                  </div> -->
+                  <div id="users-list" class="list-group position-relative" *ngFor="let custLog of custLogData;">
+
+                    <span class="media">
+                      <span class="avatar avatar-md avatar-online">
+                        <img class="media-object d-flex mr-3 bg-primary height-50 rounded-circle" src="assets/img/portrait/small/avatar-s-3.png"
+                          alt="Generic placeholder image">
+                        <i></i>
+                      </span>
+                      <div class="media-body">
+                        <h6 class="list-group-item-heading">{{custLog.name}}
+                          <span class="font-small-3 float-right primary">{{custLog.date | date:'MMMM d, y, H:mm:s a'}}</span>
+
+                          <!-- <span class="font-small-3 float-right primary">{{custLog.date | date:'EEEE, MMMM d, y, H:mm:s a'}}</span> -->
+                        </h6>
+                        <p class="list-group-item-text text-muted">
+                          <i class="ft-check primary font-small-2"></i> {{custLog.notes}}
+                          <span class="float-right primary">
+                            <i class="font-medium-1 icon-pin blue-grey lighten-3"></i>
+                          </span>
+                        </p>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-actions ">
+                <button class="btn btn-warning btn-raised pull-right ml-1" (click)='cancel()'>
+                    <i class="ft-x"></i> Cancel
+                </button>
+                <button type="submit" class="btn btn-success btn-raised pull-right">
+                    <i class="fa fa-check-square-o"></i>
+                    Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

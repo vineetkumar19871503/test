@@ -1,0 +1,707 @@
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="content-header">Update Sub Job</div>
+  </div>
+</div>
+<!-- AddJob Form Validaton Starts -->
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-block">
+          <form [formGroup]="editJobForm" method="post" (ngSubmit)="onFormSubmit()" novalidate>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="customerName">Customer Name</label>
+                  <input type="text" class="form-control" placeholder="Customer Name" id="customerName" formControlName="customer_name">
+                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('customer_name').disabled && !editJobForm.get('customer_name').valid && (editJobForm.get('customer_name').dirty || editJobForm.get('customer_name').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="customerJob">Customer Job</label>
+                  <input type="text" class="form-control" placeholder="Customer Job" id="customerJob" formControlName="customer_job">
+                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('customer_job').disabled && !editJobForm.get('customer_job').valid && (editJobForm.get('customer_job').dirty || editJobForm.get('customer_job').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="customerId">Customer ID</label>
+                  <input type="text" class="form-control" placeholder="Customer ID" id="customerId" formControlName="customer_id">
+                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('customer_id').disabled && !editJobForm.get('customer_id').valid && (editJobForm.get('customer_id').dirty || editJobForm.get('customer_id').touched)">Field is invalid</small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="quoteId">Quote ID</label>
+                  <input type="text" class="form-control" placeholder="Quote ID" id="quoteId" formControlName="quote_id">
+                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('quote_id').disabled && !editJobForm.get('quote_id').valid && (editJobForm.get('quote_id').dirty || editJobForm.get('quote_id').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="jobId">Job ID</label>
+                  <input type="text" class="form-control" placeholder="Job ID" id="jobId" formControlName="job_id">
+                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('job_id').disabled && !editJobForm.get('job_id').valid && (editJobForm.get('job_id').dirty || editJobForm.get('job_id').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="jobName">Job Name</label>
+                  <input type="text" class="form-control" placeholder="Job Name" id="jobName" formControlName="job_name">
+                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('job_name').disabled && !editJobForm.get('job_name').valid && (editJobForm.get('job_name').dirty || editJobForm.get('job_name').touched)">Field is invalid</small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="billFrom">Bill From</label>
+                  <select id="billFrom" formControlName="bill_from" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top"
+                    data-title="Bill From">
+                    <option value=''>-- Select Bill From --</option>
+                    <option value='amijot'>Amijot</option>
+                    <option value='economy'>Economy</option>
+                  </select>
+                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('bill_from').valid && (editJobForm.get('bill_from').dirty || editJobForm.get('bill_from').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="purchaseOrder">Purchase Order</label>
+                  <input type="text" class="form-control" placeholder="Purchase Order" id="purchaseOrder" formControlName="purchase_order">
+                  <small class="form-text text-muted danger" *ngIf="  !editJobForm.get('purchase_order').disabled && !editJobForm.get('purchase_order').valid && (editJobForm.get('purchase_order').dirty || editJobForm.get('purchase_order').touched)">Field is invalid</small>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="prelimDate">Prelim Date</label>
+                  <div class="input-group">
+                    <input class="form-control" id="prelimDate" (click)="pd.toggle()" placeholder="yyyy-mm-dd" formControlName="prelim_date"
+                      [(ngModel)]="pdModel" ngbDatepicker #pd="ngbDatepicker">
+                    <div class="input-group-addon" (click)="(pdvalue) ? '' : pd.toggle()">
+                      <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                    </div>
+                    <small class="form-text text-muted danger" *ngIf="!editJobForm.get('prelim_date').disabled  && !editJobForm.get('prelim_date').valid && (editJobForm.get('prelim_date').dirty || editJobForm.get('prelim_date').touched)">Field is invalid</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="prelimDate">Request Date 1</label>
+                  <div class="input-group">
+                    <input class="form-control" id="requestDate1" (click)="rd1.toggle()" placeholder="yyyy-mm-dd" formControlName="request_dates1"
+                      [(ngModel)]="rd1Model" ngbDatepicker #rd1="ngbDatepicker">
+                    <div class="input-group-addon" (click)="(rd1value) ? '' : rd1.toggle()">
+                      <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                    </div>
+                    <small class="form-text text-muted danger" *ngIf="!editJobForm.get('request_dates1').disabled && !editJobForm.get('request_dates1').valid && (editJobForm.get('request_dates1').dirty || editJobForm.get('request_dates1').touched)">Field is invalid</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="prelimDate">Request Date 2</label>
+                  <div class="input-group">
+                    <input class="form-control" id="requestDate2" (click)="rd2.toggle()" placeholder="yyyy-mm-dd" formControlName="request_dates2"
+                      [(ngModel)]="rd2Model" ngbDatepicker #rd2="ngbDatepicker">
+                    <div class="input-group-addon" (click)="(rd2value) ? '' : rd2.toggle()">
+                      <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                    </div>
+                    <small class="form-text text-muted danger" *ngIf="!editJobForm.get('request_dates2').disabled && !editJobForm.get('request_dates2').valid && (editJobForm.get('request_dates2').dirty || editJobForm.get('request_dates2').touched)">Field is invalid</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="prelimDate">Request Date 3</label>
+                  <div class="input-group">
+                    <input class="form-control" id="requestDate3" (click)="rd3.toggle()" placeholder="yyyy-mm-dd" formControlName="request_dates3"
+                      [(ngModel)]="rd3Model" ngbDatepicker #rd3="ngbDatepicker">
+                    <div class="input-group-addon" (click)="(rd3value) ? '' : rd3.toggle()">
+                      <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                    </div>
+                    <small class="form-text text-muted danger" *ngIf="!editJobForm.get('request_dates3').disabled && !editJobForm.get('request_dates3').valid && (editJobForm.get('request_dates3').dirty || editJobForm.get('request_dates3').touched)">Field is invalid</small>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+
+            <div class="form-group">
+              <label for="origin">Job Site</label>
+              <input id="origin" placeholder="Search for Job Site" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+                class="form-control" #search formControlName="origin">
+              <!-- <agm-map [latitude]="originLat" [longitude]="originLng" [zoom]="zoom">
+                                <agm-marker [latitude]="originLat" [longitude]="originLng"></agm-marker>
+                            </agm-map> -->
+              <small class="form-text text-muted danger" *ngIf=" !editJobForm.get('origin').disabled && !editJobForm.get('origin').valid && (editJobForm.get('origin').dirty || editJobForm.get('origin').touched)">Field is invalid</small>
+            </div>
+            <!-- <br />
+                        <br />
+                        <br /> -->
+            <div class="form-group">
+              <label for="destination">Quarry Site</label>
+              <select id="destination" formControlName="destination" (ngModelChange)="onChange($event)" class="form-control" data-title="Quarry">
+                <option value="">-- Select Quarry --</option>
+                <option *ngFor="let quarriesite of quarriesite;" value={{quarriesite.value}}>{{quarriesite.name}}</option>
+              </select>
+              <!-- <input id="destination" placeholder="Search for Quarry Site" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+                class="form-control" #search formControlName="destination"> -->
+
+              <small class="form-text text-muted danger" *ngIf="!editJobForm.get('destination').valid && (editJobForm.get('destination').dirty || editJobForm.get('destination').touched)">Field is invalid</small>
+            </div>
+            <!-- <br /> -->
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Certified Payroll</label>
+                  <div class="input-group">
+                    <label class="display-inline-block custom-control custom-radio ml-1">
+                      <input type="radio" value="y" checked formControlName="certified_payroll" class="custom-control-input">
+                      <span class="custom-control-indicator"></span>
+                      <span class="custom-control-description ml-0">Yes</span>
+                    </label>
+                    <label class="display-inline-block custom-control custom-radio">
+                      <input type="radio" value="n" formControlName="certified_payroll" class="custom-control-input">
+                      <span class="custom-control-indicator"></span>
+                      <span class="custom-control-description ml-0">No</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="billType">Bill Type</label>
+                  <select id="billType" (change)="changeBillType()" formControlName="bill_type" class="form-control" data-toggle="tooltip"
+                    data-trigger="hover" data-placement="top" data-title="Bill Type">
+                    <option value="">-- Select Bill Type --</option>
+                    <option *ngFor="let billAndPayType of billAndPayTypes;" value={{billAndPayType.value}}>{{billAndPayType.name}}</option>
+                  </select>
+                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('bill_type').valid && (editJobForm.get('bill_type').dirty || editJobForm.get('bill_type').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="payType">Pay type</label>
+                  <select id="payType" (change)="changePayType()" formControlName="pay_type" class="form-control" data-toggle="tooltip" data-trigger="hover"
+                    data-placement="top" data-title="Pay Type">
+                    <option value="">-- Select Pay Type --</option>
+                    <option *ngFor="let billAndPayType of billAndPayTypes;" value={{billAndPayType.value}}>{{billAndPayType.name}}</option>
+                  </select>
+                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('pay_type').valid && (editJobForm.get('pay_type').dirty || editJobForm.get('pay_type').touched)">Field is invalid</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="billMinimum">Bill Minimum</label>
+                  <div class="input-group">
+                    <input type="number" onkeypress="return event.charCode >= 48" min="1" class="form-control" placeholder="Bill Minimum" id="billMinimum"
+                      formControlName="bill_minimum">
+                    <div class="input-group-append" *ngIf="selectedBillTypevalues">
+                      <span class="input-group-text" id="basic-addon2">{{selectedBillTypevalues}}</span>
+                    </div>
+                  </div>
+                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('bill_minimum').valid && (editJobForm.get('bill_minimum').dirty || editJobForm.get('bill_minimum').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="payMinimum">Pay Minimum</label>
+                  <div class="input-group">
+                    <input type="number" onkeypress="return event.charCode >= 48" min="1" class="form-control" placeholder="Pay Minimum" id="payMinimum"
+                      formControlName="pay_minimum">
+                    <div class="input-group-append" *ngIf="selectedPayTypevalues">
+                      <span class="input-group-text" id="basic-addon2">{{selectedPayTypevalues}}</span>
+                    </div>
+                  </div>
+                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('pay_minimum').valid && (editJobForm.get('pay_minimum').dirty || editJobForm.get('pay_minimum').touched)">Field is invalid</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="input-group">
+                  <label class="display-inline-block custom-control custom-check ml-1">
+                    <input type='checkbox' id="bill_includes" (change)="calculateNetValue()" formControlName="bill_includes" [(ngModel)]="billing_includes_div"
+                      class='custom-control-input'>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description ml-0">Billing Includes</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="input-group">
+                  <label class="display-inline-block custom-control custom-check ml-1">
+                    <input type='checkbox' id="pay_includes" (change)="calculateNetValue()" formControlName="pay_includes" [(ngModel)]="pay_includes_div"
+                      class='custom-control-input'>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description ml-0">Pay Includes</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row" *ngIf="billing_includes_div">
+                  <div class="col-md-6">
+                    <div>
+                      <div class="input-group">
+                        <label class="display-inline-block custom-control custom-check ml-1">
+                          <input formControlName="bill_bridge_toll_check" [(ngModel)]="bill_bridge_toll_check" (change)="calculateNetValue()" type='checkbox'
+                            class='custom-control-input'>
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-description ml-0">Bridge Toll</span>
+                        </label>
+                      </div>
+                      <div class="input-group">
+                        <label class="display-inline-block custom-control custom-check ml-1">
+                          <input formControlName="bill_dump_fee_check" [(ngModel)]="bill_dump_fee_check" (change)="calculateNetValue()" type='checkbox'
+                            class='custom-control-input'>
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-description ml-0">Dump Fee</span>
+                        </label>
+                      </div>
+                      <div class="input-group">
+                        <label class="display-inline-block custom-control custom-check ml-1">
+                          <input formControlName="bill_environmental_fee_check" [(ngModel)]="bill_environmental_fee_check" (change)="calculateNetValue()"
+                            type='checkbox' class='custom-control-input'>
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-description ml-0">Environmental Fee</span>
+                        </label>
+                      </div>
+                      <div class="input-group">
+                        <label>Others</label>
+                        <input formControlName="bill_others" (keyup)="calculateNetValue()" [(ngModel)]="bill_others" type='text' class='form-control'>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div *ngIf="bill_bridge_toll_check" class="input-group">
+                      <label class="display-inline-block custom-control custom-check ml-1">
+                        <input type='checkbox' formControlName="bill_notApplicableCheck" [(ngModel)]="bill_notApplicableCheck" (change)="calculateNetValue()"
+                          class='custom-control-input'>
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description ml-0">NA</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="row" *ngIf="pay_includes_div">
+                  <div class="col-md-6">
+                    <div>
+                      <div class="input-group">
+                        <label class="display-inline-block custom-control custom-check ml-1">
+                          <input formControlName="pay_bridge_toll_check" [(ngModel)]="pay_bridge_toll_check" (change)="calculateNetValue()" type='checkbox'
+                            class='custom-control-input'>
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-description ml-0">Bridge Toll</span>
+                        </label>
+                      </div>
+                      <div class="input-group">
+                        <label class="display-inline-block custom-control custom-check ml-1">
+                          <input formControlName="pay_dump_fee_check" [(ngModel)]="pay_dump_fee_check" (change)="calculateNetValue()" type='checkbox'
+                            class='custom-control-input'>
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-description ml-0">Dump Fee</span>
+                        </label>
+                      </div>
+                      <div class="input-group">
+                        <label class="display-inline-block custom-control custom-check ml-1">
+                          <input formControlName="pay_environmental_fee_check" [(ngModel)]="pay_environmental_fee_check" (change)="calculateNetValue()"
+                            type='checkbox' class='custom-control-input'>
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-description ml-0">Environmental Fee</span>
+                        </label>
+                      </div>
+                      <div class="input-group">
+                        <label>Others</label>
+                        <input formControlName="pay_others" (keyup)="calculateNetValue()" [(ngModel)]="pay_others" type='text' class='form-control'>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div *ngIf="pay_bridge_toll_check" class="input-group">
+                      <label class="display-inline-block custom-control custom-check ml-1">
+                        <input type='checkbox' formControlName="pay_notApplicableCheck" [(ngModel)]="pay_notApplicableCheck" (change)="calculateNetValue()"
+                          class='custom-control-input'>
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description ml-0">NA</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <section id="light">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="card-block">
+                            <table class="table">
+                              <thead class="thead-default">
+                                <tr>
+                                  <th>Truck Type</th>
+                                  <th>Bill Rate
+                                    <table class="" *ngIf="billing_includes_div">
+                                      <thead class="thead-default">
+                                        <tr>
+                                          <th style="padding-left: 0px; padding-right: 0px;">
+                                            <span *ngIf="billingChangeCheck('bill_bridge_toll_check');" style="padding-right: 0.75rem;">
+                                              Bridge Toll
+                                            </span>
+                                          </th>
+                                          <th style="padding-left: 0px; padding-right: 0px;">
+                                            <span *ngIf="billingChangeCheck('bill_dump_fee_check');" style="padding-right: 0.75rem;">
+                                              Dump Fee
+                                            </span>
+                                          </th>
+                                          <th style="padding-left: 0px; padding-right: 0px;">
+                                            <span *ngIf="billingChangeCheck('bill_environmental_fee_check');" style="padding-right: 0.75rem;">
+                                              Environmental Fee
+                                            </span>
+                                          </th>
+                                          <th>{{bill_others}}</th>
+                                        </tr>
+                                      </thead>
+                                    </table>
+                                  </th>
+                                  <th>Pay Rate
+                                    <table class="" *ngIf="pay_includes_div">
+                                      <thead class="thead-default">
+                                        <tr>
+                                          <th style="padding-left: 0px; padding-right: 0px;">
+                                            <span *ngIf="payChangeCheck('pay_bridge_toll_check');" style="padding-right: 0.75rem;">
+                                              Bridge Toll
+                                            </span>
+                                          </th>
+                                          <th style="padding-left: 0px; padding-right: 0px;">
+                                            <span *ngIf="payChangeCheck('pay_dump_fee_check');" style="padding-right: 0.75rem;">
+                                              Dump Fee
+                                            </span>
+                                          </th>
+                                          <th style="padding-left: 0px; padding-right: 0px;">
+                                            <span *ngIf="payChangeCheck('pay_environmental_fee_check');" style="padding-right: 0.75rem;">
+                                              Environmental Fee
+                                            </span>
+                                          </th>
+                                          <th>{{pay_others}}</th>
+                                        </tr>
+                                      </thead>
+                                    </table>
+                                  </th>
+                                  <!-- <th>Dump</th> -->
+                                  <th>Net</th>
+                                </tr>
+                              </thead>
+                              <tbody formArrayName="truck_details">
+                                <tr *ngFor="let truck of editJobForm.get('truck_details').controls; let i = index;">
+                                  <ng-container [formGroupName]="i">
+                                    <td class="truckname">
+                                      {{_tempTruckTypes[i]}}
+                                    </td>
+                                    <td>
+                                      <input type="number" (keyup)="calculateNetValue()" onkeypress="return event.charCode >= 48" min="1" formControlName="bill_rate"
+                                        class="form-control" placeholder="$0">
+                                      <small class="form-text text-muted danger" *ngIf="!editJobForm.get('truck_details').at(i).get('bill_rate').valid && (editJobForm.get('truck_details').at(i).get('bill_rate').dirty || editJobForm.get('truck_details').at(i).get('bill_rate').touched)">
+                                        Field is invalid
+                                      </small>
+                                      <table class="" *ngIf="billing_includes_div">
+                                        <tbody>
+                                          <tr>
+                                            <td style="padding-left: 0px; padding-right: 0px;">
+                                              <div *ngIf="billingChangeCheck('bill_bridge_toll_check');" style="padding-right: 0.75rem;">
+
+                                                <input type="number" (keyup)="calculateNetValue()" [attr.disabled]="billingDisableCheck('bill_bridge_toll_check')" formControlName="bill_bridge_toll_input"
+                                                  class="form-control" placeholder="Bridge Toll">
+                                                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('truck_details').at(i).get('bill_bridge_toll_input').valid && (editJobForm.get('truck_details').at(i).get('bill_bridge_toll_input').dirty || editJobForm.get('truck_details').at(i).get('bill_bridge_toll_input').touched)">
+                                                      Field is invalid
+                                                    </small>
+                                              </div>
+                                            </td>
+                                            <td style="padding-left: 0px; padding-right: 0px;">
+                                              <div *ngIf="billingChangeCheck('bill_dump_fee_check');" style="padding-right: 0.75rem;">
+                                                <input type="number" (keyup)="calculateNetValue()" formControlName="bill_dump_fee_input" class="form-control" placeholder="Dump Fee">
+                                                <small class="form-text text-muted danger" *ngIf="!editJobForm.get('truck_details').at(i).get('bill_dump_fee_input').valid && (editJobForm.get('truck_details').at(i).get('bill_dump_fee_input').dirty || editJobForm.get('truck_details').at(i).get('bill_dump_fee_input').touched)">
+                                                    Field is invalid
+                                                  </small>
+                                              </div>
+                                            </td>
+                                            <td style="padding-left: 0px; padding-right: 0px;">
+                                              <div *ngIf="billingChangeCheck('bill_environmental_fee_check');" style="padding-right: 0.75rem;">
+                                                <input type="number" (keyup)="calculateNetValue()" formControlName="bill_environmental_fee_input" class="form-control" placeholder="Environmental Fee">
+                                                <small class="form-text text-muted danger" *ngIf="!editJobForm.get('truck_details').at(i).get('bill_environmental_fee_input').valid && (editJobForm.get('truck_details').at(i).get('bill_environmental_fee_input').dirty || editJobForm.get('truck_details').at(i).get('bill_environmental_fee_input').touched)">
+                                                    Field is invalid
+                                                  </small>
+                                              </div>
+                                            </td>
+                                            <td *ngIf="bill_others">
+                                              <input type="number" (keyup)="calculateNetValue()" formControlName="bill_others_input" class="form-control" placeholder="">
+                                              <small class="form-text text-muted danger" *ngIf="!editJobForm.get('truck_details').at(i).get('bill_others_input').valid && (editJobForm.get('truck_details').at(i).get('bill_others_input').dirty || editJobForm.get('truck_details').at(i).get('bill_others_input').touched)">
+                                                  Field is invalid
+                                                </small>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </td>
+                                    <td>
+                                      <input type="number" (keyup)="calculateNetValue()" onkeypress="return event.charCode >= 48" min="1" formControlName="pay_rate"
+                                        class="form-control" placeholder="$0">
+                                      <small class="form-text text-muted danger" *ngIf="!editJobForm.get('truck_details').at(i).get('pay_rate').valid && (editJobForm.get('truck_details').at(i).get('pay_rate').dirty || editJobForm.get('truck_details').at(i).get('pay_rate').touched)">
+                                        Field is invalid
+                                      </small>
+                                      <table class="" *ngIf="pay_includes_div">
+                                        <tbody>
+                                          <tr>
+                                            <td style="padding-left: 0px; padding-right: 0px;">
+                                              <div *ngIf="payChangeCheck('pay_bridge_toll_check');" style="padding-right: 0.75rem;">
+
+                                                <input type="number" (keyup)="calculateNetValue()" [attr.disabled]="payDisableCheck('pay_bridge_toll_check')" formControlName="pay_bridge_toll_input"
+                                                  class="form-control" placeholder="Bridge Toll">
+                                                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('truck_details').at(i).get('pay_bridge_toll_input').valid && (editJobForm.get('truck_details').at(i).get('pay_bridge_toll_input').dirty || editJobForm.get('truck_details').at(i).get('pay_bridge_toll_input').touched)">
+                                                      Field is invalid
+                                                    </small>
+                                              </div>
+                                            </td>
+                                            <td style="padding-left: 0px; padding-right: 0px;">
+                                              <div *ngIf="payChangeCheck('pay_dump_fee_check');" style="padding-right: 0.75rem;">
+                                                <input type="number" (keyup)="calculateNetValue()" formControlName="pay_dump_fee_input" class="form-control" placeholder="Dump Fee">
+                                                <small class="form-text text-muted danger" *ngIf="!editJobForm.get('truck_details').at(i).get('pay_dump_fee_input').valid && (editJobForm.get('truck_details').at(i).get('pay_dump_fee_input').dirty || editJobForm.get('truck_details').at(i).get('pay_dump_fee_input').touched)">
+                                                    Field is invalid
+                                                  </small>
+                                              </div>
+                                            </td>
+                                            <td style="padding-left: 0px; padding-right: 0px;">
+                                              <div *ngIf="payChangeCheck('pay_environmental_fee_check');" style="padding-right: 0.75rem;">
+                                                <input type="number" (keyup)="calculateNetValue()" formControlName="pay_environmental_fee_input" class="form-control" placeholder="Environmental Fee">
+                                                <small class="form-text text-muted danger" *ngIf="!editJobForm.get('truck_details').at(i).get('pay_environmental_fee_input').valid && (editJobForm.get('truck_details').at(i).get('pay_environmental_fee_input').dirty || editJobForm.get('truck_details').at(i).get('pay_environmental_fee_input').touched)">
+                                                    Field is invalid
+                                                  </small>
+                                              </div>
+                                            </td>
+                                            <td *ngIf="pay_others">
+                                              <input type="number" (keyup)="calculateNetValue()" formControlName="pay_others_input" class="form-control" placeholder="">
+                                              <small class="form-text text-muted danger" *ngIf="!editJobForm.get('truck_details').at(i).get('pay_others_input').valid && (editJobForm.get('truck_details').at(i).get('pay_others_input').dirty || editJobForm.get('truck_details').at(i).get('pay_others_input').touched)">
+                                                  Field is invalid
+                                                </small>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </td>
+                                    <!-- <td>
+                                        <input type="number" onkeypress="return event.charCode >= 48" min="1" formControlName="dump" class="form-control" placeholder="$0">
+                                        <small class="form-text text-muted danger" *ngIf="!editJobForm.get('truck_details').at(i).get('dump').valid && (editJobForm.get('truck_details').at(i).get('dump').dirty || editJobForm.get('truck_details').at(i).get('dump').touched)">
+                                          Field is invalid
+                                        </small>
+                                      </td> -->
+                                    <td>
+                                      <input type="number" formControlName="net_value" [ngStyle]="{ 'background-color': net_color[i] }" class="form-control" placeholder="Net">
+                                    </td>
+                                  </ng-container>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-block">
+                    
+                    <table class="table">
+                      <thead class="thead-default">
+                        <tr>
+                          <th>Quarry</th>
+                          <th>Material</th>
+                          <!-- <th>We Buy</th>
+                          <th>We Sell</th> -->
+                        </tr>
+                      </thead>
+                      <tbody formArrayName="quarries">
+                        <tr *ngFor="let prop of editJobForm.get('quarries').controls; let i = index;">
+                          <ng-container [formGroupName]="i">
+                            <td>
+                              <select id="quarry" formControlName="quarry" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top"
+                                data-title="Select Quarry">
+                                <option value=''>-- Select Quarry --</option>
+                                <option *ngFor='let quarry of quarries;' value={{quarry.value}}>{{quarry.name}}</option>
+                              </select>
+                              <small class="form-text text-muted danger" *ngIf="!editJobForm.get('quarries').at(i).get('quarry').valid && (editJobForm.get('quarries').at(i).get('quarry').dirty || editJobForm.get('quarries').at(i).get('quarry').touched)">
+                                Field is invalid
+                              </small>
+                            </td>
+                            <td>
+                              <select id='material' formControlName="material" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement='top'
+                                data-title="Select Material">
+                                <option value=''>-- Select Material --</option>
+                                <option *ngFor='let material of materials;' value={{material.value}}>{{material.name}}</option>
+                              </select>
+                              <small class="form-text text-muted danger" *ngIf="!editJobForm.get('quarries').at(i).get('material').valid && (editJobForm.get('quarries').at(i).get('material').dirty || editJobForm.get('quarries').at(i).get('material').touched)">
+                                Field is invalid
+                              </small>
+                            </td>
+                            <!-- <td>
+                              <input formControlName="we_buy" type="number" onkeypress="return event.charCode >= 48" min="1" class="form-control" placeholder="eg: $0">
+                              <small class="form-text text-muted danger" *ngIf="!editJobForm.get('quarries').at(i).get('we_buy').valid && (editJobForm.get('quarries').at(i).get('we_buy').dirty || editJobForm.get('quarries').at(i).get('we_buy').touched)">
+                                Field is invalid
+                              </small>
+                            </td>
+                            <td>
+                              <input formControlName="we_sell" type="number" onkeypress="return event.charCode >= 48" min="1" class="form-control" placeholder="eg: $0"> -->
+                            <!-- <a *ngIf="i>0" href="javascript:void(0)" (click)="removeMaterial(i)">X</a> -->
+                            <!-- <small class="form-text text-muted danger" *ngIf="!editJobForm.get('quarries').at(i).get('we_sell').valid && (editJobForm.get('quarries').at(i).get('we_sell').dirty || editJobForm.get('quarries').at(i).get('we_sell').touched)">
+                                Field is invalid
+                              </small>
+                            </td> -->
+                          </ng-container>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <button type="buttton" (click)="_addQuaryMaterialRow($event)" class="btn btn-success btn-raised">Add Material</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="quoteDocument">Job Document</label>
+              <input id="document" placeholder="Please select" type="file" style="color:transparent;" title="Choose Files" class="form-control"
+                formControlName="document" ng2FileSelect [uploader]="fileUploader" multiple>
+            </div>
+            <div class="form-group">
+              <div class="smallImage" *ngFor="let item of documentData; let i = index;">
+                <a class="text-dark" [href]="item.file_path" target="_blank">
+                  <div class="image_file">
+                    <span *ngIf="showImageIcon(item.name) != ('txt' || 'doc' || 'xls' || 'csv')">
+                      <i class="fa fa-file-image-o fa-5x"></i>
+                    </span>
+                    <span *ngIf="showImageIcon(item.name) == 'txt'">
+                      <i class="fa fa-file-text-o fa-5x"></i>
+                    </span>
+                    <span *ngIf="showImageIcon(item.name) == 'doc'">
+                      <i class="fa fa-file-o fa-5x"></i>
+                    </span>
+                    <span *ngIf="showImageIcon(item.name) == ('xls' || 'csv')">
+                      <i class="fa fa-file-excel-o fa-5x"></i>
+                    </span>
+                  </div>
+                  <div class="image_name">
+                    <p>{{ item.name }}</p>
+                  </div>
+                </a>
+              </div>
+              <div class="smallImage" *ngFor="let item of fileUploader.queue; let i = index;">
+                <div class="image_file">
+                  <span *ngIf="showImageIcon(item?.file?.name) != ('txt' || 'doc' || 'xls' || 'csv')">
+                    <i class="fa fa-file-image-o fa-5x"></i>
+                  </span>
+                  <span *ngIf="showImageIcon(item?.file?.name) == 'txt'">
+                    <i class="fa fa-file-text-o fa-5x"></i>
+                  </span>
+                  <span *ngIf="showImageIcon(item?.file?.name) == 'doc'">
+                    <i class="fa fa-file-o fa-5x"></i>
+                  </span>
+                  <span *ngIf="showImageIcon(item?.file?.name) == ('xls' || 'csv')">
+                    <i class="fa fa-file-excel-o fa-5x"></i>
+                  </span>
+                  <a class="full_close" (click)="item.remove()">X</a>
+                </div>
+                <div class="image_name">
+                  <p>{{ item?.file?.name }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="direction">Directions</label>
+                  <textarea id="direction" placeholder="Direction" formControlName="direction" class="form-control" rows="3"> </textarea>
+                  <small class="danger" *ngIf="!editJobForm.get('direction').valid && (editJobForm.get('direction').dirty || editJobForm.get('direction').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group" [formGroup]="editJobForm.get('subjob_logs')">
+                  <input type="hidden" formControlName="name">
+                  <label for="internal_notes">Internal Notes</label>
+                  <textarea id="internal_notes" placeholder="Internal Notes" formControlName="internal_notes" class="form-control" rows="3"> </textarea>
+                  <small class="form-text text-muted danger" *ngIf="!editJobForm.get('subjob_logs').get('internal_notes').valid && (editJobForm.get('subjob_logs').get('internal_notes').touched)">Field is invalid</small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="chat-application" style="max-height: 300px; overflow:auto">
+                  <label for="customerName">Sub Jobs Logs</label>
+                  <div id="users-list" class="list-group position-relative" *ngFor="let subJobLog of subJobLogData;">
+                    <span class="media">
+                      <span class="avatar avatar-md avatar-online">
+                        <img class="media-object d-flex mr-3 bg-primary height-50 rounded-circle" src="assets/img/portrait/small/avatar-s-3.png"
+                          alt="Generic placeholder image">
+                        <i></i>
+                      </span>
+                      <div class="media-body">
+                        <h6 class="list-group-item-heading">{{subJobLog.name}}
+                          <span class="font-small-3 float-right primary">{{subJobLog.date | date:'MMMM d, y, h:mm a'}}</span>
+                        </h6>
+                        <p class="list-group-item-text text-muted">
+                          <i class="ft-check primary font-small-2"></i> {{subJobLog.internal_notes}}
+                          <span class="float-right primary">
+                            <i class="font-medium-1 icon-pin blue-grey lighten-3"></i>
+                          </span>
+                        </p>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-actions">
+                <button class="btn btn-warning btn-raised pull-right ml-1" (click)='cancel()'>
+                  <i class="ft-x"></i> Cancel
+                </button>
+                <button type="submit" class="btn btn-success btn-raised pull-right">
+                  <i class="fa fa-check-square-o"></i>
+                  Update Sub Job
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                       <a [routerLink]="['/dashboard']" class="pull-left "> Home </a> 
+                    </li>
+                    <li class="breadcrumb-item">
+                       Billing
+                    </li>
+                   
+                </ol>
+               
+
+            </div>
+            <div class="card-header">
+                <h4 class="card-title">Customers
+                    <!-- <a [routerLink]="['/quotes/add']" class="pull-right btn btn-success btn-raised "> Add Quotes </a> -->
+                </h4>
+            </div>
+            <div class="clearfix input-group col-md-3">
+                <input class="form-control" [(ngModel)]="fdtVal" (ngModelChange)="onfdtChange($event)" id="fdt" (click)="fdt.toggle()" placeholder="yyyy-mm-dd"
+                    ngbDatepicker #fdt="ngbDatepicker">
+                <div class="input-group-addon" (click)="fdt.toggle()">
+                    <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-block">
+                    <section id="filter" class="mb-3">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ngx-datatable class="material bootstrap" [rows]="bills" [loadingIndicator]="loadingIndicator" [columns]="columns" [columnMode]="'force'"
+                                    [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'">
+                                    <ngx-datatable-column name="Customer ID" prop="customer_id">
+                                        <ng-template let-value="value" ngx-datatable-cell-template>
+                                            {{value}}
+                                        
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name="Customer Name" prop="cust_name">
+                                        <ng-template let-value="value" ngx-datatable-cell-template>
+                                            {{value}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="Job ID" prop="subjobid">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <a [routerLink]="['/bills/tagsListByJobId', row.subjobobjid,datevalue,row.c_id]">
+                                                {{row.customer_id+'-'+row.jobid+'-'+value }}
+                                            </a>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name="Job Name" prop="job_name">
+                                        <ng-template let-value="value" ngx-datatable-cell-template>
+                                            {{value}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <!-- <ngx-datatable-column name="Total Jobs" prop="quotes_count">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <a href="javascript:void(0)" class="" (click)="openQuoteStatusModal(quoteStatusModal, row.c_id)">
+                                                {{value}}
+                                            </a>
+                                        </ng-template>
+                                    </ngx-datatable-column> -->
+                                </ngx-datatable>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

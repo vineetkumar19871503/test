@@ -1,0 +1,437 @@
+<ngx-loading [show]="loading"></ngx-loading>
+
+<!-- import drivers template start -->
+<ng-template #importDriversModal let-c="close" let-d="dismiss">
+    <div class="position-relative">
+        <div class="job-modal-overlay" *ngIf="actionLoader">
+            <span class="job-overlay-text">Loading...</span>
+        </div>
+        <div class="modal-header">
+            <h4 class="modal-title">Import Drivers</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body fix-height-modal">
+            <ngx-datatable #table class='bootstrap' [columns]="modalDriverColumns" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                [rowHeight]="'auto'" [rows]='modalDrivers' [selectionType]="'single'" (dblclick)='addDriverDetailToImportedData()'
+                (select)='selectModalDriver($event)'>
+            </ngx-datatable>
+        </div>
+        <div class="modal-footer">
+            <div class="form-actions">
+                <button type="button" class="btn btn-danger btn-raised" (click)="c('Close click')">Close</button>
+                <button type="button" [disabled]="!modalDriverSelected" class="btn btn-success btn-raised" (click)='addDriverDetailToImportedData()'>Add</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- import drivers template end -->
+
+<!-- import pullers template start -->
+<ng-template #importPullersModal let-c="close" let-d="dismiss">
+    <div class="position-relative">
+        <div class="job-modal-overlay" *ngIf="actionLoader">
+            <span class="job-overlay-text">Loading...</span>
+        </div>
+        <div class="modal-header">
+            <h4 class="modal-title">Import Pullers</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body fix-height-modal">
+            <ngx-datatable #table class='bootstrap' [columns]="modalDriverColumns" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                [rowHeight]="'auto'" [rows]='modalDrivers' [selectionType]="'single'" (dblclick)='addDriverDetailToImportedData("pu")'
+                (select)='selectModalDriver($event)'>
+            </ngx-datatable>
+        </div>
+        <div class="modal-footer">
+            <div class="form-actions">
+                <button type="button" class="btn btn-danger btn-raised" (click)="c('Close click')">Close</button>
+                <button type="button" [disabled]="!modalDriverSelected" class="btn btn-success btn-raised" (click)='addDriverDetailToImportedData("pu")'>Add</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- import pullers template end -->
+
+<!-- import subhaulers template start -->
+<ng-template #importSubhaulersModal let-c="close" let-d="dismiss">
+    <div class="position-relative">
+        <div class="job-modal-overlay" *ngIf="actionLoader">
+            <span class="job-overlay-text">Loading...</span>
+        </div>
+        <div class="modal-header">
+            <h4 class="modal-title">Import Subhaulers</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body fix-height-modal">
+            <ngx-datatable #subhaulerTable id="abc" class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                [rowHeight]="'auto'" [rows]='modalDrivers' [selectionType]="'single'" (select)='selectModalDriver($event)' [groupExpansionDefault]="true"
+                [groupRowsBy]="'sh_id'" (dblclick)='addDriverDetailToImportedData()'>
+                <ngx-datatable-group-header [rowHeight]="50" #myGroupHeader (toggle)="_onDetailToggle($event)">
+                    <ng-template let-group="group" let-expanded="expanded" ngx-datatable-group-header-template>
+                        <div style="padding-left:5px;">
+                            <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded" title="Expand/Collapse Group"
+                                (click)="_toggleExpandGroup(group, subhaulerTable)">
+                                <b>{{group.value[0].sh_name}}</b>
+                            </a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-group-header>
+                <!-- Row Column Template -->
+                <ngx-datatable-column name="Driver Name" prop="first_name" editable="true" frozenLeft="True" [resizeable]="false">
+                    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-group="group">
+                        {{value}}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Truck Type" prop="truck_type" editable="true" frozenLeft="True" [resizeable]="false">
+                    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-group="group">
+                        {{value}}
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <div class="modal-footer">
+            <div class="form-actions">
+                <button type="button" class="btn btn-danger btn-raised" (click)="c('Close click')">Close</button>
+                <button type="button" [disabled]="!modalDriverSelected" class="btn btn-success btn-raised" (click)="addDriverDetailToImportedData()">Import</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- import drivers template end -->
+
+
+<!-- cancel job template start -->
+<ng-template #cancelJobModal let-c="close" let-d="dismiss">
+    <div class="position-relative">
+        <div class="job-modal-overlay" *ngIf="actionLoader">
+            <span class="job-overlay-text">Loading...</span>
+        </div>
+        <div class="modal-header">
+            <h5 class="modal-title">Are you sure you want to cancel this job?</h5>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="cancelJobForm" method="post" (ngSubmit)="onCancelJobFormSubmit()" novalidate>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="material">Cancelled By</label>
+                            <input type="text" class="form-control" placeholder="Cancelled By" id="cancelledBy" formControlName="cancelled_by">
+                            <small class="form-text text-muted danger" *ngIf="!cancelJobForm.get('cancelled_by').valid && (cancelJobForm.get('cancelled_by').dirty || cancelJobForm.get('cancelled_by').touched)">Field is invalid</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="material">Cancel Reason</label>
+                            <textarea type="text" class="form-control" placeholder="Cancel Reason" id="cancelReason" formControlName="cancel_reason"></textarea>
+                            <small class="form-text text-muted danger" *ngIf="!cancelJobForm.get('cancel_reason').valid && (cancelJobForm.get('cancel_reason').dirty || cancelJobForm.get('cancel_reason').touched)">Field is invalid</small>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="form-actions">
+                <button type="button" class="btn btn-danger btn-raised" (click)="c('Close click')">Close</button>
+                <button type="button" class="btn btn-success btn-raised" (click)='cancelJob()'>Cancel Job</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- cancel job template end -->
+
+<div class="row">
+    <div class="content-header col-md-6">
+        Assign Job
+        <span class='text-danger'>{{jobCancelled ? '(Job Cancelled)': ''}}</span>
+    </div>
+    <div class="col-md-6 text-right">
+        <a class="btn btn-raised btn-success" [routerLink]="['/jobs/dispatch']">
+            <i class="ft-corner-down-left"></i>
+            Back
+        </a>
+    </div>
+</div>
+<!-- Reactive Form Validaton Starts -->
+<section id="filter" class="mb-3">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="date" style="color: #75787d; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 500;">Date</label>
+                                <div class="input-group">
+                                    <input class="form-control" readonly [(ngModel)]="assignDate" id="date" placeholder="yyyy-mm-dd" ngbDatepicker #assignDt="ngbDatepicker">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <form [formGroup]="assignForm" method="post" (ngSubmit)="saveAssign()" novalidate>
+                            <!-- job details form group start -->
+                            <ng-container formGroupName="job_details">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="customerId">Customer ID</label>
+                                            <input type="text" class="form-control" placeholder="Customer ID" id="customerId" formControlName="customer_id">
+                                            <small class="form-text text-muted danger" *ngIf="!jobDetailsGrp.get('customer_id').disabled && !jobDetailsGrp.get('customer_id').valid && (jobDetailsGrp.get('customer_id').dirty || jobDetailsGrp.get('customer_id').touched)">Field is invalid</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="customerName">Customer Name</label>
+                                            <input type="text" class="form-control" placeholder="Customer Name" id="customerName" formControlName="customer_name">
+                                            <small class="form-text text-muted danger" *ngIf="!jobDetailsGrp.get('customer_name').disabled && !jobDetailsGrp.get('customer_name').valid && (jobDetailsGrp.get('customer_name').dirty || jobDetailsGrp.get('customer_name').touched)">Field is invalid</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="jobId">Job ID</label>
+                                            <input type="text" class="form-control" placeholder="Job ID" id="jobId" formControlName="job_id">
+                                            <small class="form-text text-muted danger" *ngIf="!jobDetailsGrp.get('job_id').disabled && !jobDetailsGrp.get('job_id').valid && (jobDetailsGrp.get('job_id').dirty || jobDetailsGrp.get('job_id').touched)">Field is invalid</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="jobName">Job Name</label>
+                                            <input type="text" class="form-control" placeholder="Job Name" id="jobName" formControlName="job_name">
+                                            <small class="form-text text-muted danger" *ngIf="!jobDetailsGrp.get('job_name').disabled && !jobDetailsGrp.get('job_name').valid && (jobDetailsGrp.get('job_name').dirty || jobDetailsGrp.get('job_name').touched)">Field is invalid</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <h4 class="form-section col-md-12">
+                                        <i _ngcontent-c8="" class="ft-info"></i>
+                                        Materials
+                                    </h4>
+                                    <div class="badge badge-success mr-1" *ngFor="let quarry of quarries;">
+                                        {{quarry.material}}
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="origin">Job Site</label>
+                                            <textarea id="origin" placeholder="Search for Job Site" autocorrect="off" autocapitalize="off" spellcheck="off" class="form-control"
+                                                #search formControlName="origin"></textarea>
+                                            <small class="form-text text-muted danger" *ngIf="!jobDetailsGrp.get('origin').disabled && !jobDetailsGrp.get('origin').valid && (jobDetailsGrp.get('origin').dirty || jobDetailsGrp.get('origin').touched)">Field is invalid</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="destination">Quarry Site</label>
+                                            <textarea id="destination" placeholder="Search for Quarry Site" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+                                                class="form-control" #search formControlName="destination"></textarea>
+                                            <small class="form-text text-muted danger" *ngIf="!jobDetailsGrp.get('destination').disabled && !jobDetailsGrp.get('destination').valid && (jobDetailsGrp.get('destination').dirty || jobDetailsGrp.get('destination').touched)">Field is invalid</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row pt-2 pb-2">
+                                    <div class="col-md-2" *ngIf='!jobCancelled && !isNotTodaysJob' style="padding-top:30px;">
+                                        <button class='btn btn-raised shadow-z-2 btn-danger' (click)="openCancelModal(cancelJobModal);">Cancel Job</button>
+                                    </div>
+                                    <div class="{{jobCancelled ? 'col-md-6' : 'col-md-5'}}">
+                                        <div class="form-group">
+                                            <label for="cancelledBy">Cancelled By</label>
+                                            <input type="text" class="form-control" placeholder="Cancelled By" value="dispatchDetail.cancelled_by" id="cancelledBy" formControlName="cancelled_by">
+                                            <small class="form-text text-muted danger" *ngIf="!jobDetailsGrp.get('cancelled_by').disabled && !jobDetailsGrp.get('cancelled_by').valid && (jobDetailsGrp.get('cancelled_by').dirty || jobDetailsGrp.get('cancelled_by').touched)">Field is invalid</small>
+                                        </div>
+                                    </div>
+                                    <div class="{{jobCancelled ? 'col-md-6' : 'col-md-5'}}">
+                                        <div class="form-group">
+                                            <label for="cancelledReason">Reason</label>
+                                            <input type="text" class="form-control" placeholder="Cancel Reason" value="dispatchDetail.cancel_reason" id="cancelledReason"
+                                                formControlName="cancel_reason">
+                                            <small class="form-text text-muted danger" *ngIf="!jobDetailsGrp.get('cancel_reason').disabled && !jobDetailsGrp.get('cancel_reason').valid && (jobDetailsGrp.get('cancel_reason').dirty || jobDetailsGrp.get('cancel_reason').touched)">Field is invalid</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="direction">Directions</label>
+                                            <textarea id="direction" placeholder="comments" formControlName="direction" class="form-control" rows="3"></textarea>
+                                            <small class="danger" *ngIf="!jobDetailsGrp.get('direction').disabled && !jobDetailsGrp.get('direction').valid && (jobDetailsGrp.get('direction').dirty || jobDetailsGrp.get('direction').touched)">
+                                                Field is invalid
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="internal_notes">Internal Notes</label>
+                                            <textarea id="internal_notes" placeholder="comments" formControlName="internal_notes" class="form-control" rows="3"> </textarea>
+                                            <small class="danger" *ngIf="!jobDetailsGrp.get('internal_notes').disabled && !jobDetailsGrp.get('internal_notes').valid && (jobDetailsGrp.get('internal_notes').dirty || jobDetailsGrp.get('internal_notes').touched)">
+                                                Field is invalid
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <!-- job details form group end -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="startTime">Time</label>
+                                        <ngb-timepicker formControlName="start_time" [meridian]="true" [(ngModel)]="defaultTime">
+                                        </ngb-timepicker>
+                                        <!-- <small class="danger" *ngIf="!assignForm.get('start_time').didsabled && !assignForm.get('start_time').valid && (assignForm.get('start_time').dirty || assignForm.get('start_time').touched)">
+                                            Field is invalid
+                                        </small> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="internal_notes">Truck Quantity </label>
+                                        <input type="number" min="0" onkeypress="return event.charCode >= 48" min="1" class="form-control" id="noOfTrucks" placeholder="Truck Quantity"
+                                            formControlName="no_of_trucks" class="form-control" />
+                                        <small class="danger" *ngIf="!assignForm.get('no_of_trucks').disabled && !assignForm.get('no_of_trucks').valid && (assignForm.get('no_of_trucks').dirty || assignForm.get('no_of_trucks').touched)">
+                                            Field is invalid
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="interval">Repeat Every (min)</label>
+                                        <input type="number" min="0" onkeypress="return event.charCode >= 48" min="1" class="form-control" id="interval" placeholder="Interval"
+                                            formControlName="interval" class="form-control" />
+                                        <small class="danger" *ngIf="!assignForm.get('interval').disabled && !assignForm.get('interval').valid && (assignForm.get('interval').dirty || assignForm.get('interval').touched)">
+                                            Field is invalid
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" formArrayName="truck_qty">
+                                <h4 class="form-section col-md-12">
+                                    <i class="ft-info"></i>
+                                    Truck Quantities:
+                                </h4>
+                                <ng-container *ngFor="let t_qty of assignForm.get('truck_qty').controls; let i = index;">
+                                    <div class="col-md-3 form-group" [formGroupName]="i">
+                                        <label>{{_tempTruckTypes[i]}}</label>
+                                        <input type="hidden" formControlName="truck_type">
+                                        <input type="number" min="0" onkeypress="return event.charCode >= 48" min="1" formControlName="qty" class="form-control"
+                                            placeholder="{{_tempTruckTypes[i]+' quantity'}}">
+                                        <small class="form-text text-muted danger" *ngIf="!assignForm.get('truck_qty').at(i).get('qty').disabled && !assignForm.get('truck_qty').at(i).get('qty').valid && (assignForm.get('truck_qty').at(i).get('qty').dirty || assignForm.get('truck_qty').at(i).get('qty').touched)">
+                                            Field is invalid
+                                        </small>
+                                    </div>
+                                </ng-container>
+                                <div class="col-md-3 form-group">
+                                    <label>
+                                        <strong style="color:#37474F">Total</strong>
+                                    </label>
+                                    <input type="text" value={{totalQty}} readonly class="form-control" placeholder="Total Trucks">
+                                </div>
+                            </div>
+                            <!-- imported drivers/pullers/subhaulers table start -->
+                            <div>
+                                <div class="row">
+                                    <ng-container *ngIf="!jobCancelled && !isNotTodaysJob">
+                                        <div class="col-md-6 text-left">
+                                            <div class="btn-group btn-group-justified btn-group-raised btn-round">
+                                                <a href="javascript:void(0)" class="btn btn-round btn-primary" (click)="openImportDriversModal(importDriversModal)">Drivers</a>
+                                                <a href="javascript:void(0)" class="btn btn-round btn-info" (click)="openImportPullersModal(importPullersModal)">Pullers</a>
+                                                <a href="javascript:void(0)" class="btn btn-round btn-warning" (click)="openImportSubhaulersModal(importSubhaulersModal)">Subhaulers</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 text-right">
+                                            <div class="btn-group btn-group-justified btn-group-raised btn-round">
+                                                <a href="javascript:void(0)" class="btn btn-round btn-primary" (click)="addRow()">Add Row</a>
+                                                <a href="javascript:void(0)" class="btn btn-round btn-info" (click)="deleteSlot()">Delete</a>
+                                                <a href="javascript:void(0)" class="btn btn-round btn-warning" [class.disabled]="isCancelledDriver" (click)="cancelDriver()">Cancel</a>
+                                                <a href="javascript:void(0)" class="btn btn-round btn-success" (click)="generateSlots()">Save</a>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <div class="col-md-12 vertical-align-rows">
+                                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'"
+                                            [rows]='importedData' [selectionType]="'single'"
+                                            (select)='onSlotSelect($event)' [messages]="{emptyMessage: 'No slots available', totalMessage: 'total'}">
+                                            <div class="vineet">
+                                            <ngx-datatable-column name="Time" prop="time">
+                                                <ng-template let-rowIndex="rowIndex" let-row="row" let-value="value" ngx-datatable-cell-template>
+                                                    <ng-container formArrayName="tmp_dr_data">
+                                                        <ng-container *ngIf="row.newRow" [formGroupName]="rowIndex">
+                                                            <ngb-timepicker formControlName="time" [meridian]="true"></ngb-timepicker>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="!row.newRow">{{row.time}}</ng-container>
+                                                    </ng-container>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="Driver Name" prop="driver_name">
+                                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                                    {{value.length ? value : '--'}}
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="Truck Type" prop="truck_type">
+                                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                                    {{value.length ? value : '--'}}
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <!-- <ngx-datatable-column name="Confirmed" prop="confirmed">
+                                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                                    <div [class.success]="value==true" [class.danger]="value==false">
+                                                        <strong>{{value?"Yes":"--"}}</strong>
+                                                    </div>
+                                                </ng-template>
+                                            </ngx-datatable-column> -->
+                                            <ngx-datatable-column name="Comment" prop="comment">
+                                                <ng-template let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                                                    <ng-container formArrayName="tmp_dr_data">
+                                                        <ng-container [formGroupName]="rowIndex">
+                                                            <input type="text" formControlName="comment" class="form-control" placeholder="Comment" />
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="Tag#" prop="tag_id">
+                                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                                    {{value.length ? value : '--'}}
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                            <ngx-datatable-column name="Status">
+                                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                                    <span *ngIf='row.confirmed' class='text-success'>Confirmed</span>
+                                                    <span *ngIf='row.cancelled' class='text-danger'>Cancelled</span>
+                                                    <span *ngIf='!row.cancelled && row.no_show_up' class='text-danger'>No show up</span>
+                                                    <span *ngIf='!row.cancelled && !row.no_show_up && !row.confirmed'>--</span>
+                                                </ng-template>
+                                            </ngx-datatable-column>
+                                        </div>
+                                        </ngx-datatable>
+                                    </div>
+                                </div>
+                                <!-- <div class="form-actions">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success btn-raised">Assign</button>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-12 text-right">
+                        <a class="btn btn-raised btn-success" [routerLink]="['/jobs/dispatch']">
+                            <i class="ft-corner-down-left"></i>
+                            Back
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

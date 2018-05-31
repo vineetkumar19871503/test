@@ -1,0 +1,48 @@
+<!-- loading animation -->
+<ngx-loading [show]="loading"></ngx-loading>
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title"><span class="pull-left pt-1">Jobs</span>
+          <!-- <a [routerLink]="['/quotes/add']" class="pull-right btn btn-success btn-raised "> Add Quotes </a> -->
+        </h4>
+        <input class="form-control round col-md-3 pull-left ml-5" type='text' (input)='filterJobs($event.target.value, jobsList)'
+          placeholder='Type to filter jobs (min 2 chars)' />
+      </div>
+      <div class="card-body">
+        <div class="card-block">
+          <section id="filter" class="mb-3">
+            <div class="row">
+              <div class="col-sm-12">
+                <ngx-datatable #jobsList class="material bootstrap" [rows]="jobs" [loadingIndicator]="loadingIndicator" [columns]="columns"
+                  [columnMode]="'force'" [headerHeight]="50" [limit]="10" [footerHeight]="50" [rowHeight]="'auto'">
+                  <ngx-datatable-column name="Customer ID" prop="customer_id" [resizeable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      {{value}}
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Customer Name" prop="org_name" [resizeable]="false">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                      <a [routerLink]="['/customers/edit/', row.c_id]">
+                        {{value}}
+                      </a>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Total Jobs" prop="quotes_count" [resizeable]="false">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                      <a [routerLink]="['/jobs/jobsListByCustomerId/', row.c_id]">
+                        {{value}}
+                      </a>
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,92 @@
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <span class="pull-left pt-1">Quotes</span>
+                    <input class="form-control round col-md-3 pull-left ml-5 pull-left" type='text' (input)='filterQuotes($event.target.value, quotesTable)'
+                        placeholder='Type to filter quotes (min 2 chars)' />
+                    <a [routerLink]="['/quotes/add']" class="pull-right btn btn-success btn-raised "> Add Quotes </a>
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="card-block">
+                    <section id="filter" class="mb-3">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ngx-datatable #quotesTable class="material bootstrap" [rows]="quotes" [loadingIndicator]="loadingIndicator" [columns]="columns"
+                                    [columnMode]="'force'" [limit]="10" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'">
+                                    <ngx-datatable-column name="Customer ID" prop="customer_id" [resizeable]="false">
+                                        <ng-template let-value="value" ngx-datatable-cell-template>
+                                            {{value}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name="Customer Name" prop="org_name" [resizeable]="false">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <a [routerLink]="['/customers/edit', row.c_id]">
+                                                {{value}}
+                                            </a>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name="Total Jobs" prop="quotes_count" [resizeable]="false">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <a href="javascript:void(0)" class="" (click)="openQuoteStatusModal(quoteStatusModal, row.c_id)">
+                                                {{value}}
+                                            </a>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                </ngx-datatable>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Import job template start -->
+<ng-template #quoteStatusModal let-c="close" let-d="dismiss">
+    <div class="position-relative">
+        <div class="job-modal-overlay" *ngIf="actionLoader">
+            <span class="job-overlay-text">Loading...</span>
+        </div>
+        <div class="modal-header">
+            <h4 class="modal-title">
+                <strong>Customer Quotes</strong>
+            </h4>
+            <input class="form-control round col-md-3 pull-left ml-5 pull-left" type='text' (input)='filterModalQuotes($event.target.value, custQuotestable)'
+                placeholder='Type to filter quotes (min 2 chars)' />
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body fix-height-modal">
+            <ngx-datatable #custQuotestable class='bootstrap' [columns]="jobColumns" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                [rowHeight]="'auto'" [rows]='quotesWithStatus' [limit]="10">
+                <ngx-datatable-column name="Quote Name" prop="quote_name" [resizeable]="false">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <span *ngIf="row.converted">{{value}}</span>
+                        <a (click)="modalRef.close()" [routerLink]="['/quotes/view', row._id]" class="success p-0" *ngIf="row.converted" data-original-title=""
+                            title="view">
+                            <i class="ft-eye font-medium-3 mr-2"></i>
+                        </a>
+                        <a (click)="modalRef.close()" [routerLink]="['/quotes/edit', row._id]" *ngIf="!row.converted">{{value}}</a>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Status" prop="status" [resizeable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <strong class='text-capitalize'>{{value.replace('_', ' ')}}</strong>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <div class="modal-footer">
+            <div class="form-actions">
+                <button type="button" class="btn btn-danger btn-raised" (click)="c('Close click')">Close</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- Import job template end -->

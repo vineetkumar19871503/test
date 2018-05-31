@@ -1,0 +1,156 @@
+<!-- loading animation -->
+<ngx-loading [show]="loading"></ngx-loading>
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Customers
+          <a [routerLink]="['/quotes/add']" class="pull-right btn btn-success btn-raised "> Add Quotes </a>
+        </h4>
+      </div>
+      <div class="card-body">
+        <div class="card-block">
+          <section id="filter" class="mb-3">
+            <div class="row">
+              <div class="col-sm-12">
+                <ngx-datatable class="material bootstrap" [rows]="jobs" [loadingIndicator]="loadingIndicator" [columns]="columns" [columnMode]="'force'"
+                  [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'">
+                  <ngx-datatable-column name="#Cust" prop="customer_id">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      {{value}}
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Customer Name" prop="cust_name">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                      {{value}} </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Total Job" prop="quotes_count">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                      {{value}}
+
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <section id="advanced">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">{{pageTitle}}</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-block">
+            <ngb-alert *ngIf="apiMsg" type="light" [dismissible]="false">
+              {{apiMsg}}
+            </ngb-alert>
+            <ngb-alert *ngIf="error" type="danger" [dismissible]="false">
+              {{error}}
+            </ngb-alert>
+            <ngb-accordion *ngIf="jobs!==undefined && jobs.length>0" #acc="ngbAccordion">
+              <ngb-panel *ngFor="let job of jobs">
+                <ng-template ngbPanelTitle>
+                  <div class="acc-title row">
+                    <span class="col-md-4">
+                      <b>{{job.customer_id}}</b>
+                    </span>
+                    <span class="col-md-4">{{job.customer_name}}</span>
+                    <div class="btn-group col-md-4" role="group" aria-label="Basic example">
+                      <button type="button" (click)="onActionClick($event, 'detail', job)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
+                        data-placement="top" data-original-title="View Job Detail">
+                        <i class="fa ft-eye"></i>
+                      </button>
+                      <button type="button" (click)='onActionClick($event, "add", job.c_id)' class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
+                        data-placement="top" data-original-title="Add New Job">
+                        <i class="fa ft-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                  <ngb-accordion #acc="ngbAccordion">
+                    <ngb-panel>
+                      <ng-template ngbPanelTitle>
+                        <div class="acc-title row">
+                          <span class="col-md-4">
+                            <b>{{job.customer_id+'-'+job.job_id+'-01'}}</b>
+                          </span>
+                          <span class="col-md-4">{{job.job_name}}</span>
+                          <div class="btn-group col-md-4" role="group" aria-label="Basic example">
+                            <button type="button" (click)="onActionClick($event, 'detail', job)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
+                              data-placement="top" data-original-title="View Job Detail">
+                              <i class="fa ft-eye"></i>
+                            </button>
+                            <button type="button" (click)='onActionClick($event, "add", "sj__"+job._id)' class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
+                              data-placement="top" data-original-title="Add New Job">
+                              <i class="fa ft-plus"></i>
+                            </button>
+                            <button type="button" (click)="onActionClick($event, 'edit', job._id)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
+                              data-placement="top" data-original-title="Edit Job">
+                              <i class="ft-edit-2"></i>
+                            </button>
+                            <button type="button" (click)="onActionClick($event, 'delete', job._id)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
+                              data-placement="top" data-original-title="Delete Job">
+                              <i class="ft-trash-2"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </ng-template>
+                      <ng-template ngbPanelContent>
+                        {{job.job_name}}
+                      </ng-template>
+                    </ngb-panel>
+                  </ngb-accordion>
+                  <ng-container *ngIf="job.sub_jobs!==undefined && job.sub_jobs.length>0">
+                    <ngb-accordion #acc="ngbAccordion">
+                      <ngb-panel *ngFor="let subjob of job.sub_jobs">
+                        <ng-template ngbPanelTitle>
+                          <div class="acc-title row">
+                            <span class="col-md-4">
+                              <b>{{job.customer_id+'-'+job.job_id+'-'+subjob.job_id}}</b>
+                            </span>
+                            <span class="col-md-4">{{subjob.job_name}}</span>
+                            <div class="btn-group col-md-4" role="group" aria-label="Basic example">
+                              <button type="button" (click)="onActionClick($event, 'detail', job)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
+                                data-placement="top" data-original-title="View Job Detail">
+                                <i class="fa ft-eye"></i>
+                              </button>
+                              <button type="button" (click)='onActionClick($event, "add", "sj__"+job._id)' class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
+                                data-placement="top" data-original-title="Add New Job">
+                                <i class="fa ft-plus"></i>
+                              </button>
+                              <button type="button" (click)="onActionClick($event, 'edit', job._id)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
+                                data-placement="top" data-original-title="Edit Job">
+                                <i class="ft-edit-2"></i>
+                              </button>
+                              <button type="button" (click)="onActionClick($event, 'delete', job._id)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
+                                data-placement="top" data-original-title="Delete Job">
+                                <i class="ft-trash-2"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template ngbPanelContent>
+                          {{subjob.job_name}}
+                        </ng-template>
+                      </ngb-panel>
+                    </ngb-accordion>
+                  </ng-container>
+                </ng-template>
+              </ngb-panel>
+            </ngb-accordion>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->

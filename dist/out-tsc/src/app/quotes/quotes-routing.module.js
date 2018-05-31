@@ -1,0 +1,54 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var add_quote_component_1 = require("./add/add-quote.component");
+var edit_quote_component_1 = require("./edit/edit-quote.component");
+var quotes_list_component_1 = require("./list/quotes-list.component");
+var routes = [
+    {
+        path: '',
+        children: [
+            {
+                path: 'add',
+                component: add_quote_component_1.AddQuoteComponent,
+                data: {
+                    title: 'Add quote'
+                }
+            },
+            {
+                path: 'edit/:id',
+                component: edit_quote_component_1.EditQuoteComponent,
+                data: {
+                    title: 'Add quote'
+                }
+            },
+            {
+                path: 'list',
+                component: quotes_list_component_1.QuotesListComponent,
+                data: {
+                    title: 'Quotes List'
+                }
+            }
+        ]
+    }
+];
+var QuotesRoutingModule = (function () {
+    function QuotesRoutingModule() {
+    }
+    QuotesRoutingModule = __decorate([
+        core_1.NgModule({
+            imports: [router_1.RouterModule.forChild(routes)],
+            exports: [router_1.RouterModule],
+        })
+    ], QuotesRoutingModule);
+    return QuotesRoutingModule;
+}());
+exports.QuotesRoutingModule = QuotesRoutingModule;
+//# sourceMappingURL=quotes-routing.module.js.map

@@ -1,0 +1,57 @@
+<!-- loading animation -->
+<ngx-loading [show]="loading"></ngx-loading>
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">
+          <span class="pull-left pt-1">customer Jobs</span>
+          <input class="form-control round col-md-3 ml-5 pull-left" type='text' (input)='filterJobs($event.target.value, jobsTable)'
+            placeholder='Type to filter jobs (min 2 chars)' />
+          <a (click)="backClicked()" class="pull-right btn btn-success btn-raised">Back</a>
+        </h4>
+      </div>
+      <div class="card-body">
+        <div class="card-block">
+          <section id="filter" class="mb-3">
+            <div class="row">
+              <div class="col-sm-12">
+                <ngx-datatable #jobsTable class="material bootstrap" [rows]="jobs" [loadingIndicator]="loadingIndicator" [columns]="columns"
+                  [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [limit]="10" [rowHeight]="'auto'">
+                  <ngx-datatable-column name="Job ID" prop="job_id">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                      <a [routerLink]="['/jobs/SubjobsListByJobId/', row._id]">
+                        {{row.customer_id+'-'+value }}
+                      </a>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Customer Name" prop="customer.cust_name">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                      {{value}}
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Job Name" prop="job_name">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                      {{value}}
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Origin" prop="origin.address">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      {{value}}
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Destination" prop="destination.address">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      {{value}}
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

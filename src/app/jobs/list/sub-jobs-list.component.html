@@ -1,0 +1,55 @@
+<!-- loading animation -->
+<ngx-loading [show]="loading"></ngx-loading>
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">
+          <span class="pull-left pt-1">Sub Jobs</span>
+          <input class="form-control round col-md-3 ml-5 pull-left" type='text' (input)='filterJobs($event.target.value, jobsTable)'
+            placeholder='Type to filter jobs (min 2 chars)' />
+          <span class=" pull-right text-right">
+            <a [routerLink]="['/subjobs/add', _id]" class="btn btn-success btn-raised "> Add Sub Job </a>
+            <a [routerLink]="['/jobs/jobsListByCustomerId', c_id]" class="btn btn-danger btn-raised  ">Back</a>
+          </span>
+        </h4>
+      </div>
+      <div class="card-body">
+        <div class="card-block">
+          <section id="filter" class="mb-3">
+            <div class="row">
+              <div class="col-sm-12">
+                <ngx-datatable #jobsTable class="material bootstrap" [rows]="jobs" [loadingIndicator]="loadingIndicator" [columns]="columns"
+                  [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [limit]="10" [rowHeight]="'auto'">
+                  <ngx-datatable-column name=" Sub Job ID" prop="disp_jobid">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      {{value}}
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Job Name" prop="job_name">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                      {{value}}
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Job Site" prop="origin.address">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      {{value}}
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Action" prop="destination">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                      <a _ngcontent-c18="" [routerLink]="['/subjobs/edit', row._id]" class="success p-0" data-original-title="" title="Edit Sub Job">
+                        <i _ngcontent-c18="" class="ft-edit-2 font-medium-3 mr-2"></i>
+                      </a>
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

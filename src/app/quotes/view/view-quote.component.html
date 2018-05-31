@@ -1,0 +1,195 @@
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="content-header">View Quote</div>
+    <a (click)="backClicked()" class="pull-right btn btn-success btn-raised  ">Back</a>
+  </div>
+</div>
+<!-- Addquote Form Validaton Starts -->
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-block">
+          <form [formGroup]="editQuoteForm" method="post" (ngSubmit)="onQuoteFormSubmit()" novalidate>
+            <h4 class="form-section"> Customer Details </h4>
+            <div class="form-group row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="customerName">Customer Name</label>
+                  <ng2-completer [placeholder]="'Search customers by name'" [datasource]="customersList" (selected)="selectCustomer($event)"
+                    formControlName="customer_name" [minSearchLength]="0" [inputClass]="['form-control']"></ng2-completer>
+                  <small class="form-text text-muted danger" *ngIf="!editQuoteForm.get('customer_name').valid && (editQuoteForm.get('customer_name').dirty || editQuoteForm.get('customer_name').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="customerId">Customer ID</label>
+                  <input type="text" class="form-control" placeholder="Customer ID" id="customerId" formControlName="customer_id">
+                  <small class="form-text text-muted danger" *ngIf="!editQuoteForm.get('customer_id').disabled && !editQuoteForm.get('customer_id').valid && (editQuoteForm.get('customer_id').dirty || editQuoteForm.get('customer_id').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="customerquote">Customer Job</label>
+                  <input type="text" class="form-control" placeholder="Customer quote" id="customerquote" formControlName="customer_job">
+                  <small class="form-text text-muted danger" *ngIf="!editQuoteForm.get('customer_job').disabled && !editQuoteForm.get('customer_job').valid && (editQuoteForm.get('customer_job').dirty || editQuoteForm.get('customer_job').touched)">Field is invalid</small>
+                </div>
+              </div>
+            </div>
+            <h4 class="form-section"> Job Details</h4>
+            <div class=" form-group row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="quoteId">Job Name</label>
+                  <input type="text" class="form-control" placeholder="Job Name" id="quote_name" formControlName="quote_name">
+                  <small class="form-text text-muted danger" *ngIf="!editQuoteForm.get('quote_name').valid && (editQuoteForm.get('quote_name').dirty || editQuoteForm.get('quote_name').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="quoteName">Job Location</label>
+                  <input id="origin" placeholder="Search for Job Site" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+                    class="form-control" #search formControlName="origin">
+                </div>
+              </div>
+            </div>
+            <h4 class="form-section"> Material Details</h4>
+            <div class="form-group row">
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="material">Quantity</label>
+                  <input type="text" class="form-control" placeholder="Quantity" id="quantity" formControlName="quantity">
+                  <small class="form-text text-muted danger" *ngIf="!editQuoteForm.get('quantity').valid && (editQuoteForm.get('quantity').dirty || editQuoteForm.get('quantity').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="quoteName">Material Type</label>
+                  <select id='material' formControlName="material" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement='top'
+                    data-title="Select Material">
+                    <option value=''>-- Select Material --</option>
+                    <option *ngFor='let material of materials;' value={{material.value}}>{{material.name}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="origin">Bill Type</label>
+              <select id="billType" formControlName="bill_type" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top"
+                data-title="Bill Type">
+                <option value="">-- Select Bill Type --</option>
+                <option *ngFor="let billAndPayType of billAndPayTypes;" value={{billAndPayType.value}}>{{billAndPayType.name}}</option>
+              </select>
+              <small class="form-text text-muted danger" *ngIf="!editQuoteForm.get('bill_type').valid && (editQuoteForm.get('bill_type').dirty || editQuoteForm.get('bill_type').touched)">Field is invalid</small>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <section id="light">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="card-block">
+                            <table class="table">
+                              <thead class="thead-default">
+                                <tr>
+                                  <th>Truck Type</th>
+                                  <th>Weekdays</th>
+                                  <th>Saturday</th>
+                                  <th>Sunday</th>
+                                </tr>
+                              </thead>
+                              <tbody formArrayName="truck_details">
+                                <tr *ngFor="let truck of editQuoteForm.get('truck_details').controls; let i = index;">
+                                  <ng-container [formGroupName]="i">
+                                    <td class="truckname">
+                                      {{_tempTruckTypes[i]}}    
+                                    </td>
+                                    <td>
+                                      <input type="number" onkeypress="return event.charCode >= 48" min="1" formControlName="weekdays" class="form-control" placeholder="$0">
+                                      <small class="form-text text-muted danger" *ngIf="!editQuoteForm.get('truck_details').at(i).get('weekdays').valid && (editQuoteForm.get('truck_details').at(i).get('weekdays').dirty || editQuoteForm.get('truck_details').at(i).get('weekdays').touched)">
+                                        Field is invalid
+                                      </small>
+                                    </td>
+                                    <td>
+                                      <input type="number" onkeypress="return event.charCode >= 48" min="1" formControlName="saturday" class="form-control" placeholder="$0">
+                                      <small class="form-text text-muted danger" *ngIf="!editQuoteForm.get('truck_details').at(i).get('saturday').valid && (editQuoteForm.get('truck_details').at(i).get('saturday').dirty || editQuoteForm.get('truck_details').at(i).get('saturday').touched)">
+                                        Field is invalid
+                                      </small>
+                                    </td>
+                                    <td>
+                                      <input type="number" onkeypress="return event.charCode >= 48" min="1"formControlName="sunday" class="form-control" placeholder="$0">
+                                      <small class="form-text text-muted danger" *ngIf="!editQuoteForm.get('truck_details').at(i).get('sunday').valid && (editQuoteForm.get('truck_details').at(i).get('sunday').dirty || editQuoteForm.get('truck_details').at(i).get('sunday').touched)">
+                                        Field is invalid
+                                      </small>
+                                    </td>
+                                  </ng-container>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="documents">Uploaded Documents</label>
+              <!-- <input id="documents" placeholder="Please select" type="file" style="color:transparent;" title="Choose Files" class="form-control"
+                formControlName="documents" ng2FileSelect [uploader]="fileUploader" multiple> -->
+            </div>
+            <div class="form-group">
+              <ng-container *ngFor="let item of quoteDocs; let i = index;">
+                <a href='{{item.file_path}}' target="_blank" class='text-dark'>
+                  <div class="smallImage">
+                    <div class="image_file">
+                      <span *ngIf="showImageIcon(item.name) != ('txt' || 'doc' || 'xls' || 'csv')">
+                        <i class="fa fa-file-image-o fa-5x"></i>
+                      </span>
+                      <span *ngIf="showImageIcon(item.name) == 'txt'">
+                        <i class="fa fa-file-text-o fa-5x"></i>
+                      </span>
+                      <span *ngIf="showImageIcon(item.name) == 'doc'">
+                        <i class="fa fa-file-o fa-5x"></i>
+                      </span>
+                      <span *ngIf="showImageIcon(item.name) == ('xls' || 'csv')">
+                        <i class="fa fa-file-excel-o fa-5x"></i>
+                      </span>
+                    </div>
+                    <div class="image_name">
+                      <p>{{ item.name }}</p>
+                    </div>
+                  </div>
+                </a>
+              </ng-container>
+            </div>
+            <div class="form-group">
+              <label for="origin">Status</label>
+              <select id="status" formControlName="status" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top"
+                data-title="Select Quarry">
+                <option value=''>-- Select Status --</option>
+                <option *ngFor='let status of statusdata;' value={{status.value}}>{{status.name}}</option>
+              </select>
+            </div>
+            <!-- <div class="form-group">
+              <div class="form-actions">
+                <button class="btn btn-warning btn-raised pull-right ml-1" (click)='cancel()'>
+                  <i class="ft-x"></i> Cancel
+                </button>
+                <button type="submit" class="btn btn-primary pull-right btn-raised ml-1" (click)="convertToJob=true" [disabled]="(editQuoteForm.get('status') && editQuoteForm.get('status').value != 'awarded') ? true : false ">Convert to Job</button>
+                <button type="submit" class="btn btn-success pull-right btn-raised ml-1">
+                  <i class="fa fa-check-square-o"></i>
+                  Update Quote
+                </button>
+              </div>
+            </div> -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

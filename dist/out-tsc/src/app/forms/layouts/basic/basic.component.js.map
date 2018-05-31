@@ -1,0 +1,1 @@
+{"version":3,"file":"basic.component.js","sourceRoot":"","sources":["../../../../../../../src/app/forms/layouts/basic/basic.component.ts"],"names":[],"mappings":";;;;;;;;AAAA,sCAA0C;AAO1C;IAAA;IACA,CAAC;IADY,cAAc;QAL1B,gBAAS,CAAC;YACT,QAAQ,EAAE,WAAW;YACrB,WAAW,EAAE,wBAAwB;YACrC,SAAS,EAAE,CAAC,wBAAwB,CAAC;SACtC,CAAC;OACW,cAAc,CAC1B;IAAD,qBAAC;CAAA,AADD,IACC;AADY,wCAAc"}

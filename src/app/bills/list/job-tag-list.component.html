@@ -1,0 +1,127 @@
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                       <a [routerLink]="['/dashboard']" class="pull-left "> Home </a> 
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a [routerLink]="['/bills/list']">Billing</a>
+                      
+                    </li>
+                    <li  class="breadcrumb-item">
+                            {{bills[0]?.customer_name}}
+                        ({{bills[0]?.customer_id}}-{{bills[0]?.jobid}}-{{bills[0]?.subjobid}})
+                     </li>
+                </ol>
+               
+
+            </div>
+            <div class="card-header">
+                <h4 class="card-title">
+                    <a [routerLink]="['/bills/tag/add/',job_id,date,customer_id]" class="pull-right btn btn-success btn-raised ">  New Tag  </a>
+                  
+
+                </h4>
+            </div>
+            <div class="clearfix input-group col-md-3">
+                <select id="jobid"  class="form-control" data-title="JobId">
+                  <!-- <option value=''>-- Select Job Id --</option> -->
+                  <option *ngFor="let jobid of jobids;" value={{jobid.subjobidvalue}}>{{jobid.subjobid}}</option>
+                </select>
+                  </div>
+            <!-- <div class="clearfix input-group col-md-3">
+                <input class="form-control" [(ngModel)]="fdtVal" (ngModelChange)="onfdtChange($event)" id="fdt" (click)="fdt.toggle()" placeholder="yyyy-mm-dd"
+                    ngbDatepicker #fdt="ngbDatepicker">
+                <div class="input-group-addon" (click)="fdt.toggle()">
+                    <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                </div>
+            </div> -->
+            <div class="card-body">
+                <div class="card-block">
+                    <section id="filter" class="mb-3">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ngx-datatable class="material bootstrap" [rows]="bills" [loadingIndicator]="loadingIndicator" [columns]="columns" [columnMode]="'force'"
+                                    [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'">
+                                    <ngx-datatable-column name="Tag Id" prop="tag_id">
+                                        <ng-template let-value="value" ngx-datatable-cell-template>
+                                        <a [routerLink]="['/bills/addbill',value]"> {{value}} </a>
+                                        <!-- {{value}} -->
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name="Job Site" prop="jobsite">
+                                        <ng-template let-value="value" ngx-datatable-cell-template>
+                                            {{value}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="Load/Dump Site" prop="querysite">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            {{value}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name="Status" prop="tag_id_status">
+                                        <ng-template let-value="value" ngx-datatable-cell-template>
+                                            {{value}}
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <!-- <ngx-datatable-column name="Total Jobs" prop="quotes_count">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <a href="javascript:void(0)" class="" (click)="openQuoteStatusModal(quoteStatusModal, row.c_id)">
+                                                {{value}}
+                                            </a>
+                                        </ng-template>
+                                    </ngx-datatable-column> -->
+                                </ngx-datatable>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Import job template start -->
+<!-- <ng-template #quoteStatusModal let-c="close" let-d="dismiss">
+    <div class="position-relative">
+        <div class="job-modal-overlay" *ngIf="actionLoader">
+            <span class="job-overlay-text">Loading...</span>
+        </div>
+        <div class="modal-header">
+            <h4 class="modal-title">
+                <strong>Customer Quotes</strong>
+            </h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <ngx-datatable #table class='bootstrap' [columns]="jobColumns" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                [rowHeight]="'auto'" [limit]="10" [rows]='quotesWithStatus'>
+                <ngx-datatable-column name="Quote Name" prop="quote_name">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <span *ngIf="row.converted">{{value}}</span>
+                        <a (click)="modalRef.close()" [routerLink]="['/quotes/view', row._id]" class="success p-0" *ngIf="row.converted" data-original-title="" title="view"><i class="ft-eye font-medium-3 mr-2"></i></a>
+                        <a (click)="modalRef.close()" [routerLink]="['/quotes/edit', row._id]" *ngIf="!row.converted">{{value}}</a>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Status" prop="status">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <strong class='text-capitalize'>{{value.replace('_', ' ')}}</strong>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <div class="modal-footer">
+            <div class="form-actions">
+                <button type="button" class="btn btn-danger btn-raised" (click)="c('Close click')">Close</button>
+            </div>
+        </div>
+    </div>
+</ng-template> -->
+<!-- Import job template end -->

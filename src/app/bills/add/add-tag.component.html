@@ -1,0 +1,493 @@
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="content-header">Add Tag </div>
+  </div>
+</div>
+<!-- AddJob Form Validaton Starts -->
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-block">
+          <form [formGroup]="addTagForm" method="post" novalidate>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="truck">Truck#</label>
+                  <input type="text" class="form-control" placeholder="Truck" id="truck" formControlName="truck">
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('truck').disabled && !addTagForm.get('truck').valid && (addTagForm.get('truck').dirty || addTagForm.get('truck').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="customerJob">Trailer#</label>
+                  <input type="text" class="form-control" placeholder="Trailer" id="trailer" formControlName="trailer">
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('trailer').disabled && !addTagForm.get('trailer').valid && (addTagForm.get('trailer').dirty || addTagForm.get('trailer').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="customerId">Account Number</label>
+                  <input type="text" class="form-control" placeholder="Account Number" id="account_no" formControlName="account_no">
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('account_no').disabled && !addTagForm.get('account_no').valid && (addTagForm.get('account_no').dirty || addTagForm.get('account_no').touched)">Field is invalid</small>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="PrimeCarrier">Prime Carrier</label>
+                  <select id="PrimeCarrier" formControlName="prime_carrier" class="form-control" data-toggle="tooltip" data-trigger="hover"
+                    data-placement="top" data-title="Prime Carrier">
+                    <option value=''>-- Select Prime Carrier --</option>
+                    <option value='amijot'>Amijot</option>
+                    <option value='economy'>Economy</option>
+                  </select>
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('prime_carrier').valid && (addTagForm.get('prime_carrier').dirty || addTagForm.get('prime_carrier').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="SubHauler">Sub Hauler</label>
+                  <input type="text" class="form-control" placeholder="Sub Hauler" id="sub_hauler" formControlName="sub_hauler">
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('sub_hauler').disabled && !addTagForm.get('sub_hauler').valid && (addTagForm.get('sub_hauler').dirty || addTagForm.get('sub_hauler').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="CustomerName">Contactor</label>
+                  <input type="text" class="form-control" placeholder="Customer Name" id="customer_name" formControlName="customer_name">
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('customer_name').disabled && !addTagForm.get('customer_name').valid && (addTagForm.get('customer_name').dirty || addTagForm.get('customer_name').touched)">Field is invalid</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="JobID">Job ID</label>
+                  <input type="text" class="form-control" placeholder="Job ID" id="job_id" formControlName="job_id">
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('job_id').disabled && !addTagForm.get('job_id').valid && (addTagForm.get('job_id').dirty || addTagForm.get('job_id').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="JobID">Material Charged to</label>
+                  <select id="Material Charged to" formControlName="material_charged_to" class="form-control" data-toggle="tooltip" data-trigger="hover"
+                    data-placement="top" data-title="Material Charged to">
+                    <option value=''>-- Select Material Charged to --</option>
+                    <option value='economy_trucking'>Economy Trucking</option>
+                    <option value='Contractor'>Contractor</option>
+                  </select>
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('material_charged_to').valid && (addTagForm.get('material_charged_to').dirty || addTagForm.get('material_charged_to').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="Material">Material</label>
+                  <input type="text" class="form-control" placeholder="Material" id="material" formControlName="material">
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('material').disabled && !addTagForm.get('material').valid && (addTagForm.get('material').dirty || addTagForm.get('material').touched)">Field is invalid</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="direction">Origin</label>
+                  <input id="origin" placeholder="Search for Job Site" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+                    class="form-control" #search formControlName="origin" >
+                  <!-- <textarea id="origin" placeholder="Origin" formControlName="origin" class="form-control" rows="3"> </textarea> -->
+                  <small class="danger" *ngIf="!addTagForm.get('origin').valid && (addTagForm.get('origin').dirty || addTagForm.get('origin').touched)">Field is invalid</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="destination">Destination</label>
+                  <select id="destination" formControlName="destination" (ngModelChange)="onQuarryChange($event)" class="form-control" data-title="Quarry">
+                    <option value=''>-- Select Quarry --</option>
+                    <option *ngFor="let quarrySite of quarries;" value={{quarrySite.value}}>{{quarrySite.name}}</option>
+                  </select>
+                  <small class="danger" *ngIf="!addTagForm.get('destination').valid && (addTagForm.get('destination').dirty || addTagForm.get('destination').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="JobID">Truck Type</label>
+                  <select id="Truck Types" formControlName="truck_types" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top"
+                    data-title="T Types">
+                    <option value=''>-- Select Truck Type --</option>
+                    <option *ngFor='let truck_type of truckTypes;' value={{truck_type.value}}>{{truck_type.name}}</option>
+                  </select>
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('material_charged_to').valid && (addTagForm.get('material_charged_to').dirty || addTagForm.get('material_charged_to').touched)">Field is invalid</small>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="TagID">Tag ID</label>
+                  <input type="text" id="TagID" placeholder="Tag ID" formControlName="tag_id" class="form-control">
+                  <small class="danger" *ngIf="!addTagForm.get('tag_id').valid && (addTagForm.get('tag_id').dirty || addTagForm.get('tag_id').touched)">Required 6 digit</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="document">Upload Documents</label>
+                  <input id="document" placeholder="Please select" type="file" style="color:transparent;" title="Choose Files" class="form-control"
+                   formControlName="document" ng2FileSelect [uploader]="fileUploader">
+                </div>
+                <div class="form-group">
+                  <div class="smallImage" *ngFor="let item of fileUploader.queue; let i = index;">
+                    <div class="image_file">
+                      <span *ngIf="showImageIcon(item?.file?.name) != ('txt' || 'doc' || 'xls' || 'csv')">
+                        <i class="fa fa-file-image-o fa-5x"></i>
+                      </span>
+                      <span *ngIf="showImageIcon(item?.file?.name) == 'txt'">
+                        <i class="fa fa-file-text-o fa-5x"></i>
+                      </span>
+                      <span *ngIf="showImageIcon(item?.file?.name) == 'doc'">
+                        <i class="fa fa-file-o fa-5x"></i>
+                      </span>
+                      <span *ngIf="showImageIcon(item?.file?.name) == ('xls' || 'csv')">
+                        <i class="fa fa-file-excel-o fa-5x"></i>
+                      </span>
+                      <a class="full_close" (click)="_removeFile(item)">X</a>
+                    </div>
+                    <div class="image_name">
+                      <p>{{ item?.file?.name }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <h4 class="form-section">
+                  Material Details
+                  <span class="tags float-right">
+                    <a href="javascript:void(0);" title="Add Material Details" (click)="_addMaterialDetailRow($event)">
+                      <i class="ft-plus-circle"></i>
+                    </a>
+                  </span>
+                </h4>
+              </div>
+              <div class="col-sm-12">
+                <table class="table">
+                  <thead class="thead-default">
+                    <tr>
+                      <th>Scale Tag No.</th>
+                      <th>Yards</th>
+                      <th>&nbsp;</th>
+                      <th>Weight</th>
+                      <th>&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody formArrayName="material_details">
+                    <tr *ngFor="let value of addTagForm.get('material_details').controls; let i = index;">
+                      <ng-container [formGroupName]="i">
+                        <td>
+                          <input type="text" id="scale_tag_no" placeholder="Scale Tag No." formControlName="scale_tag_no" class="form-control">
+                          <small class="form-text text-muted danger" *ngIf="!addTagForm.get('material_details').at(i).get('scale_tag_no').valid && (addTagForm.get('material_details').at(i).get('scale_tag_no').dirty || addTagForm.get('material_details').at(i).get('scale_tag_no').touched)">
+                            Field is invalid
+                          </small>
+                        </td>
+                        <td>
+                          <input type="text" id="yards" placeholder="Yards" formControlName="yards" (ngModel)="yards" [attr.disabled]="addTagForm.get('material_details').at(i).get('weight').value?true:null" class="form-control">
+                          <small class="form-text text-muted danger" *ngIf="!addTagForm.get('material_details').at(i).get('yards').valid && (addTagForm.get('material_details').at(i).get('yards').dirty || addTagForm.get('material_details').at(i).get('yards').touched)">
+                            Field is invalid
+                          </small>
+                        </td>
+                        <td>OR</td>
+                        <td>
+                          <input type="text" id="weight" placeholder="Weight" formControlName="weight" (ngModel)="weight" [attr.disabled]="addTagForm.get('material_details').at(i).get('yards').value?true:null" class="form-control">
+                          <small class="form-text text-muted danger" *ngIf="!addTagForm.get('material_details').at(i).get('weight').valid && (addTagForm.get('material_details').at(i).get('weight').dirty || addTagForm.get('material_details').at(i).get('weight').touched)">
+                            Field is invalid
+                          </small>
+                        </td>
+                        <td>
+                          <a *ngIf="i!=0" class="danger p-0" data-original-title="" (click)="_removeRows(this, 'material_details', i)" title="Remove">
+                            <i class="ft-x font-medium-3 mr-2"></i>
+                          </a>
+                        </td>
+                      </ng-container>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <h4 class="form-section">
+                  Loading Details
+                  <span class="tags float-right">
+                    <a href="javascript:void(0);" title="Add Loading Details" (click)="_addLoadingDetailRow($event)">
+                      <i class="ft-plus-circle"></i>
+                    </a>
+                  </span>
+                </h4>
+              </div>
+              <div class="col-sm-12">
+                <table class="table">
+                  <thead class="thead-default">
+                    <tr>
+                      <th>Time Arrival</th>
+                      <th width="300px">Time Leave</th>
+                      <th>Net Stand By</th>
+                      <th>&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody formArrayName="loading_details">
+                    <tr *ngFor="let value of addTagForm.get('loading_details').controls; let i = index;">
+                      <ng-container [formGroupName]="i">
+                        <td>
+                          <ngb-timepicker (ngModelChange)="_onTimerChange($event, i, 'loadingTa')" formControlName="time_arrival" [meridian]="false"
+                            required>
+                          </ngb-timepicker>
+                          <small class="form-text text-muted danger" *ngIf="!addTagForm.get('loading_details').at(i).get('time_arrival').valid && addTagForm.get('loading_details').at(i).get('time_arrival').errors['required']">
+                            Field is invalid
+                          </small>
+                        </td>
+                        <td>
+                          <ngb-timepicker (ngModelChange)="_onTimerChange($event, i, 'loadingLa')" formControlName="time_leave" [meridian]="false"
+                            required>
+                          </ngb-timepicker>
+                          <small class="form-text text-muted danger" *ngIf="!addTagForm.get('loading_details').at(i).get('time_leave').valid && addTagForm.get('loading_details').at(i).get('time_leave').errors['required']">
+                            Field is invalid
+                          </small>
+                          <small class="form-text text-muted danger" *ngIf="invalidTimeSelection[i]">should be greater than Time Arrival</small>
+                        </td>
+                        <td>
+                          {{loadingDisplayNetValue[i]}}
+                          <input type="hidden" placeholder="Net Stand By" formControlName="net_stand_by" class="form-control">
+                        </td>
+                        <td>
+                          <a *ngIf="i!=0" class="danger p-0" data-original-title="" (click)="_removeRows(this, 'loading_details', i)" title="Remove">
+                            <i class="ft-x font-medium-3 mr-2"></i>
+                          </a>
+                        </td>
+                      </ng-container>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <h4 class="form-section">
+                  Un Loading Time
+                  <span class="tags float-right">
+                    <a href="javascript:void(0);" title="Add Un Loading Time" (click)="_addUnLoadingTimeRow()">
+                      <i class="ft-plus-circle"></i>
+                    </a>
+                  </span>
+                </h4>
+              </div>
+              <div class="col-sm-12">
+                <table class="table">
+                  <thead class="thead-default">
+                    <tr>
+                      <th>Time Arrival</th>
+                      <th  width="300px">Time Leave</th>
+                      <th>Net Stand By</th>
+                      <th>&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody formArrayName="un_loading_time">
+                    <tr *ngFor="let value of addTagForm.get('un_loading_time').controls; let i = index;">
+                      <ng-container [formGroupName]="i">
+                        <td>
+                          <ngb-timepicker (ngModelChange)="_onTimerChange($event, i, 'unloadingTa')" formControlName="time_arrival" [meridian]="false"
+                            required>
+                          </ngb-timepicker>
+                          <small class="form-text text-muted danger" *ngIf="!addTagForm.get('un_loading_time').at(i).get('time_arrival').valid && addTagForm.get('un_loading_time').at(i).get('time_arrival').errors['required']">
+                            Field is invalid
+                          </small>
+                        </td>
+                        <td>
+                          <ngb-timepicker (ngModelChange)="_onTimerChange($event, i, 'unloadingLa')" formControlName="time_leave" [meridian]="false"
+                            required>
+                          </ngb-timepicker>
+                          <small class="form-text text-muted danger" *ngIf="!addTagForm.get('un_loading_time').at(i).get('time_leave').valid && addTagForm.get('un_loading_time').at(i).get('time_leave').errors['required']">
+                            Field is invalid
+                          </small>
+                          <small class="form-text text-muted danger" *ngIf="invalidTimeSelectionUnLoad[i]">should be greater than Time Arrival</small>
+                        </td>
+                        <td>
+                            {{unLoadingDisplayNetValue[i]}}
+                          <input type="hidden" id="net_stand_by" placeholder="Net Stand By" formControlName="net_stand_by" class="form-control">
+                        </td>
+                        <td>
+                          <a *ngIf="i!=0" class="danger p-0" data-original-title="" (click)="_removeRows(this, 'un_loading_time', i)" title="Remove">
+                            <i class="ft-x font-medium-3 mr-2"></i>
+                          </a>
+                        </td>
+                      </ng-container>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-sm-12">
+                <h4 class="form-section">
+                  For Admin Use
+                </h4>
+              </div>
+              <div class="col-sm-12">
+                <table class="table">
+                  <thead class="thead-default">
+                    <tr>
+                      <th>Start Time</th>
+                      <th>Stop Time</th>
+                      <th width="300px">Deduct Time</th>
+                      <th>Net Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <ng-container>
+                        <td>
+                            <ngb-timepicker (ngModelChange)="_onTimerChange($event, '', 'admin_start_time')" formControlName="admin_start_time" [(ngModel)]="admin_start_time" [meridian]="false"
+                            required>
+                          </ngb-timepicker>
+                          <small class="form-text text-muted danger" *ngIf="!addTagForm.get('admin_start_time').valid && addTagForm.get('admin_start_time').errors['required']">Field is invalid</small>
+                        </td>
+                        <td>
+                            <ngb-timepicker (ngModelChange)="_onTimerChange($event, '', 'admin_stop_time')" formControlName="admin_stop_time" [(ngModel)]="admin_stop_time" [meridian]="false"
+                            required>
+                          </ngb-timepicker>
+                          <!-- <input type="text" id="admin_stop_time" placeholder="Stop Time" formControlName="admin_stop_time" class="form-control"> -->
+                          <small class="form-text text-muted danger" *ngIf="!addTagForm.get('admin_stop_time').valid && addTagForm.get('admin_stop_time').errors['required']">Field is invalid</small>
+                        </td>
+                        <td>
+                            <ngb-timepicker (ngModelChange)="_onTimerChange($event, '', 'admin_deduct_time')" formControlName="admin_deduct_time" [(ngModel)]="admin_deduct_time" [meridian]="false"
+                            required>
+                          </ngb-timepicker>
+                          <!-- <input type="text" id="admin_deduct_time" placeholder="Deduct Time" formControlName="admin_deduct_time" class="form-control"> -->
+                          <small class="form-text text-muted danger" *ngIf="!addTagForm.get('admin_deduct_time').valid && addTagForm.get('admin_deduct_time').errors['required']">Field is invalid</small>
+                          <small class="form-text text-muted danger" *ngIf="invalidTimeSelectionAdminUse">Something is wrong with time selection!</small>
+                        </td>
+                        <td>
+                            {{adminNetTime}}
+                          <input type="hidden" id="admin_net_time" placeholder="Net Time" formControlName="admin_net_time" class="form-control">
+                        </td>
+                      </ng-container>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-sm-12">
+                <h4 class="form-section"></h4>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="DriverName">Driver Name</label>
+                  <input type="text" id="driver_name" placeholder="Driver Name" formControlName="driver_name" class="form-control">
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('driver_name').disabled && !addTagForm.get('driver_name').valid && (addTagForm.get('driver_name').dirty || addTagForm.get('driver_name').touched)">
+                    Field is invalid
+                  </small>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="ReceivedBy">Received By</label>
+                  <input type="text" id="received_by" placeholder="Received By" formControlName="received_by" class="form-control">
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('received_by').disabled && !addTagForm.get('received_by').valid && (addTagForm.get('received_by').dirty || addTagForm.get('received_by').touched)">
+                    Field is invalid
+                  </small>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="SignOutTime">Sign Out Time</label>
+                  <ngb-timepicker (ngModelChange)="_onTimerChange($event, '', 'test')" formControlName="sign_out_time" [(ngModel)]="sign_out_time" [meridian]="false"
+                            required>
+                          </ngb-timepicker>
+                  <!-- <input type="text" id="sign_out_time" placeholder="Sign Out Time" formControlName="sign_out_time" class="form-control"> -->
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('sign_out_time').disabled && !addTagForm.get('sign_out_time').valid && (addTagForm.get('sign_out_time').dirty || addTagForm.get('sign_out_time').touched)">
+                    Field is invalid
+                  </small>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+              <div class="col-sm-12">
+                <h4 class="form-section">CHP Use Only</h4>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="StartTime">Start Time</label>
+                  <ngb-timepicker (ngModelChange)="_onTimerChange($event, '', 'chp_start_time')" formControlName="chp_start_time" [(ngModel)]="chp_start_time" [meridian]="false"
+                            required>
+                          </ngb-timepicker>
+                  <!-- <input type="text" id="chp_start_time" placeholder="Start Time" formControlName="chp_start_time" class="form-control"> -->
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('chp_start_time').valid && addTagForm.get('chp_start_time').errors['required']">
+                    Field is invalid
+                  </small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="FinishTime">Finish Time</label>
+                  <ngb-timepicker (ngModelChange)="_onTimerChange($event, '', 'chp_finish_time')" formControlName="chp_finish_time" [(ngModel)]="chp_finish_time" [meridian]="false"
+                            required>
+                          </ngb-timepicker>
+                  <!-- <input type="text" id="chp_finish_time" placeholder="Finish Time" formControlName="chp_finish_time" class="form-control"> -->
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('chp_finish_time').valid && addTagForm.get('chp_finish_time').errors['required']">
+                    Field is invalid
+                  </small>
+                  <small class="form-text text-muted danger" *ngIf="invalidTimeSelectionChp">Something is wrong with time selection!</small>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="TotalTime">Total Time</label>
+                  <br>
+                  {{chpNetTime}}
+                  <input type="hidden" id="chp_total_time" placeholder="Total Time" formControlName="chp_total_time" class="form-control">
+                  <small class="form-text text-muted danger" *ngIf="!addTagForm.get('chp_total_time').disabled && !addTagForm.get('chp_total_time').valid && (addTagForm.get('chp_total_time').dirty || addTagForm.get('chp_total_time').touched)">
+                    Field is invalid
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group">
+                <button type="button" class="btn btn-warning btn-raised pull-right ml-1" (click)='cancel()'>
+                  <i class="ft-x"></i> Cancel
+                </button>
+                <button type="button" (click)="onJobFormSubmit()" class="btn btn-success btn-raised pull-right">
+                  <i class="fa fa-check-square-o"></i>
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

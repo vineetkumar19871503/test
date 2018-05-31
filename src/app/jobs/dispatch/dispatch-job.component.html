@@ -1,0 +1,294 @@
+<ngx-loading [show]="loading"></ngx-loading>
+
+<!-- Import job template start -->
+<ng-template #importJobModal let-c="close" let-d="dismiss">
+    <div class="position-relative">
+        <div class="job-modal-overlay" *ngIf="actionLoader">
+            <span class="job-overlay-text">Loading...</span>
+        </div>
+        <div class="modal-header">
+            <h4 class="modal-title">Import Job</h4>
+            <input class="form-control round col-md-3 pull-left ml-5" type='text' (input)='filterJobsToImport($event.target.value, importJobTable)'
+                placeholder='Type to filter jobs (min 2 chars)' />
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body fix-height-modal">
+            <ngx-datatable #importJobTable class='bootstrap' [columns]="jobColumns" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                [rowHeight]="'50'" [limit]="10" [rows]='jobs' [selectionType]="'multi'" (select)='selectedJobsToImport=$event.selected;'
+                (dblclick)="importJob();" [messages]="{emptyMessage: 'No jobs available to import', totalMessage: 'total', selectedMessage:'selected'}">
+                <ngx-datatable-column name="Cust#" prop="job.customer_id" [resizeable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <strong>{{value}}</strong>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Job#" prop="disp_jobid" [resizeable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <strong>{{value}}</strong>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Job Name" prop="job_name" [resizeable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        {{value}}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Cust Name" prop="customer.cust_name" [resizeable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        {{value}}
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <div class="modal-footer">
+            <div class="form-actions">
+                <button type="button" class="btn btn-danger btn-raised" (click)="selectedJobsToImport=[]; c('Close click')">Close</button>
+                <button type="button" class="btn btn-success btn-raised" [disabled]="!selectedJobsToImport.length" (click)="importJob();">Import</button>
+            </div>
+            <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'" [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                (change)="importJobTable.onFooterPage($event)">
+            </datatable-pager>
+        </div>
+    </div>
+</ng-template>
+<!-- Import job template end -->
+
+<!-- copy job template start -->
+<ng-template #copyJobModal let-c="close" let-d="dismiss">
+    <div class="position-relative">
+        <div class="job-modal-overlay" *ngIf="actionLoader">
+            <span class="job-overlay-text">Loading...</span>
+        </div>
+        <div class="modal-header">
+            <h4 class="modal-title">Copy Job</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="copyJobForm" method="post" (ngSubmit)="onCopyJobFormSubmit()" novalidate>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="jobId">Job#:</label>
+                            <input [readonly]="true" type="text" class="form-control" placeholder="Job ID" id="jobId" formControlName="job_id" required>
+                            <small class="form-text text-muted danger" *ngIf="!copyJobForm.get('job_id').valid && (copyJobForm.get('job_id').dirty || copyJobForm.get('job_id').touched)">Field is invalid</small>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="jobName">Job Name:</label>
+                            <input [readonly]="true" type="text" class="form-control" placeholder="Job Name" id="jobName" formControlName="job_name"
+                                required>
+                            <small class="form-text text-muted danger" *ngIf="!copyJobForm.get('job_name').valid && (copyJobForm.get('job_name').dirty || copyJobForm.get('job_name').touched)">Field is invalid</small>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="copyDate">Date:</label>
+                            <input class="form-control" id="copyDate" [minDate]="minDate" (click)="cpd.toggle()" placeholder="yyyy-mm-dd" formControlName="copy_date"
+                                [(ngModel)]="cpdModal" ngbDatepicker #cpd="ngbDatepicker">
+                            <small class="form-text text-muted danger" *ngIf="!copyJobForm.get('copy_date').valid && (copyJobForm.get('copy_date').dirty || copyJobForm.get('copy_date').touched)">This field can't be empty</small>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="form-actions">
+                <button type="button" class="btn btn-danger btn-raised" (click)="copyJobForm.reset(); c('Close click')">Close</button>
+                <button type="button" class="btn btn-success btn-raised" (click)="copyJob();">Copy</button>
+            </div>
+        </div>
+    </div>
+
+</ng-template>
+<!-- copy job template end -->
+
+<!-- move job template start -->
+<ng-template #moveJobModal let-c="close" let-d="dismiss">
+    <div class="position-relative">
+        <div class="job-modal-overlay" *ngIf="actionLoader">
+            <span class="job-overlay-text">Loading...</span>
+        </div>
+        <div class="modal-header">
+            <h4 class="modal-title">Move Job</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="moveJobForm" method="post" (ngSubmit)="onMoveJobFormSubmit()" novalidate>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="jobId">Job#:</label>
+                            <input [readonly]="true" type="text" class="form-control" placeholder="Job ID" id="jobId" formControlName="job_id" required>
+                            <small class="form-text text-muted danger" *ngIf="!moveJobForm.get('job_id').valid && (moveJobForm.get('job_id').dirty || moveJobForm.get('job_id').touched)">Field is invalid</small>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="jobName">Job Name:</label>
+                            <input [readonly]="true" type="text" class="form-control" placeholder="Job Name" id="jobName" formControlName="job_name"
+                                required>
+                            <small class="form-text text-muted danger" *ngIf="!moveJobForm.get('job_name').valid && (moveJobForm.get('job_name').dirty || moveJobForm.get('job_name').touched)">Field is invalid</small>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="moveDate">Date:</label>
+                            <input class="form-control" id="moveDate" [minDate]="minDate" [markDisabled]="disableDays" (click)="mvd.toggle()" placeholder="yyyy-mm-dd"
+                                formControlName="move_date" ngbDatepicker #mvd="ngbDatepicker">
+                            <small class="form-text text-muted danger" *ngIf="!moveJobForm.get('move_date').valid && (moveJobForm.get('move_date').dirty || moveJobForm.get('move_date').touched)">This field can't be empty</small>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="form-actions">
+                <button type="button" class="btn btn-danger btn-raised" (click)="c('Close click')">Close</button>
+                <button type="button" class="btn btn-success btn-raised" (click)="moveJob();">Move</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- move job template end -->
+
+<!-- remove job template start -->
+<ng-template #removeJobModal let-c="close" let-d="dismiss">
+    <div class="position-relative">
+        <div class="job-modal-overlay" *ngIf="actionLoader">
+            <span class="job-overlay-text">Loading...</span>
+        </div>
+        <div class="modal-header">
+            <h5 class="modal-title">Are you sure you want to remove this job?</h5>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <table class="table">
+                <tr>
+                    <td class="row">
+                        <div class="col-md-6">Customer#:</div>
+                        <div class="col-md-6">{{currentSelectedJob.customer_id}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row">
+                        <div class="col-md-6">Customer Name:</div>
+                        <div class="col-md-6">{{currentSelectedJob.customer.cust_name}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row">
+                        <div class="col-md-6">Job#:</div>
+                        <div class="col-md-6">{{currentSelectedJob.customer_id+'-'+currentSelectedJob.pjob_id+'-'+currentSelectedJob.subjob_id}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row">
+                        <div class="col-md-6">Job Name:</div>
+                        <div class="col-md-6">{{currentSelectedJob.job_name}}</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <div class="form-actions">
+                <button type="button" class="btn btn-danger btn-raised" (click)="c('Close click')">Cancel</button>
+                <button type="button" class="btn btn-success btn-raised" (click)="removeJob();">Remove</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- remove job template end -->
+
+<div class="row">
+    <div class="content-header card-body">Dispatch Job</div>
+</div>
+<!-- Reactive Form Validaton Starts -->
+<section id="filter" class="mb-3">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="text-right pull-right">
+                <div class="btn-group btn-group-justified btn-group-raised btn-round">
+                    <a href="javascript:void(0)" class="btn btn-round btn-success" [class.disabled]="isPastDate" (click)="openImportJobModal(importJobModal)">Import</a>
+                    <a href="javascript:void(0)" class="btn btn-round btn-info" [class.disabled]="cancelledJob" (click)="openCopyJobModal(copyJobModal)">Copy</a>
+                    <a href="javascript:void(0)" class="btn btn-round btn-warning" [class.disabled]="isPastDate || cancelledJob" (click)="openMoveJobModal(moveJobModal)">Move</a>
+                    <a href="javascript:void(0)" class="btn btn-round btn-danger" [class.disabled]="isPastDate || cancelledJob" (click)="openRemoveJobModal(removeJobModal)">Remove</a>
+                </div>
+            </div>
+            <input class="form-control round col-md-3 pull-left" type='text' (input)='filterDispatchedJobs($event.target.value)' placeholder='Type to filter jobs (min 2 chars)'
+            />
+            <div class="clearfix input-group col-md-3">
+                <input class="form-control" [(ngModel)]="fdtVal" (ngModelChange)="onfdtChange($event)" id="fdt" (click)="fdt.toggle()" placeholder="yyyy-mm-dd"
+                    ngbDatepicker #fdt="ngbDatepicker">
+                <div class="input-group-addon" (click)="fdt.toggle()">
+                    <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                </div>
+            </div>
+            <ngx-datatable #dispatchTable class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'"
+                [limit]="10" [rows]='importedJobs' [selectionType]="'single'" (select)='onJobSelect($event)' [messages]="{emptyMessage: 'No jobs available', totalMessage: 'total', selectedMessage: 'selected'}">
+                <ngx-datatable-column name="#Cust" prop="customer_id" [resizeable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <strong>{{value}}</strong>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Job#" prop="disp_jobid" [resizeable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <strong>{{value}}</strong>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Customer Name" prop="customer.cust_name" [resizeable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <strong>{{value}}</strong>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name='Job Name' prop='job_name' [resizeable]="false">
+                    <ng-template let-value='value' let-row='row' ngx-datatable-cell-template>
+                        <a [routerLink]="['/jobs/assign', row.dispatch_id]">{{value}}</a>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name='Job Site' prop='origin.address' [resizeable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <strong>{{value}}</strong>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name='Customer Job Name' prop='customer.org_name' [resizeable]="false">
+                    <ng-template let-value='value' ngx-datatable-cell-template>
+                        <strong>{{value}}</strong>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name='Status' [resizeable]="false">
+                    <ng-template ngx-datatable-cell-template let-row='row'>
+                        <strong class='text-danger' *ngIf='row.status'>{{row.status}}</strong>
+                        <strong *ngIf='!row.status'>--</strong>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name='Trucks' prop='total_trucks' [resizeable]="false">
+                    <ng-template let-value='value' let-row='row' ngx-datatable-cell-template>
+                        <strong>
+                            <span>{{value}}</span>
+                        </strong>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                    <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-selectedCount="selectedCount" let-pageSize="pageSize"
+                        let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                        <div style="padding: 5px 10px">
+                            {{currentSelectedJob==null ? 0 : 1 }} selected / {{rowCount}} total
+                        </div>
+                        <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'" [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                            [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                            (change)="dispatchTable.onFooterPage($event)">
+                        </datatable-pager>
+                    </ng-template>
+                </ngx-datatable-footer>
+            </ngx-datatable>
+        </div>
+    </div>
+</section>

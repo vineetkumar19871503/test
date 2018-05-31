@@ -1,0 +1,1 @@
+{"version":3,"file":"basic-cards.component.js","sourceRoot":"","sources":["../../../../../../src/app/cards/basic/basic-cards.component.ts"],"names":[],"mappings":";;;;;;;;AAAA,sCAA0C;AAQ1C;IAAA;IAEA,CAAC;IAFY,mBAAmB;QAN/B,gBAAS,CAAC;YACV,QAAQ,EAAE,iBAAiB;YAC3B,WAAW,EAAE,8BAA8B;YAC3C,SAAS,EAAE,CAAC,8BAA8B,CAAC;SAC3C,CAAC;OAEW,mBAAmB,CAE/B;IAAD,0BAAC;CAAA,AAFD,IAEC;AAFY,kDAAmB"}

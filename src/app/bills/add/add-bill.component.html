@@ -1,0 +1,304 @@
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="content-header">Billing </div>
+
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a [routerLink]="['/dashboard']" class="pull-left "> Home </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a [routerLink]="['/bills/list']">Billing</a>
+
+                    </li>
+                    <li class="breadcrumb-item">
+                        {{subjobdata.customer ?.org_name}}
+
+                        <!-- ({{bills[0]?.customer_id}}-{{bills[0]?.jobid}}-{{bills[0]?.subjobid}}) -->
+                    </li>
+
+                </ol>
+            </div>
+            <div class="card-body">
+                <div class="card-block">
+                    <form [formGroup]="addBillForm" method="post" (ngSubmit)="onBillFormSubmit()" novalidate>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="truck">Date</label>
+                                    <input type="text" class="form-control" placeholder="Date" id="created_date" formControlName="created_date">
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('created_date').disabled && !addBillForm.get('created_date').valid && (addBillForm.get('created_date').dirty || addBillForm.get('created_date').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="customerId">Customer ID</label>
+                                    <input type="text" class="form-control" placeholder="Customer ID" id="customerId" formControlName="customer_id">
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('customer_id').disabled && !addBillForm.get('customer_id').valid && (addBillForm.get('customer_id').dirty || addBillForm.get('customer_id').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <button type="buttton" class="btn btn-success btn-raised">View Route</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="truck">Customer Name</label>
+                                    <input type="text" class="form-control" id="customer_name" formControlName="customer_name">
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('customer_name').disabled && !addBillForm.get('customer_name').valid && (addBillForm.get('customer_name').dirty || addBillForm.get('customer_name').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="customerId">Job ID</label>
+                                    <input type="text" class="form-control" id="job_id" formControlName="job_id">
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('job_id').disabled && !addBillForm.get('job_id').valid && (addBillForm.get('job_id').dirty || addBillForm.get('job_id').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="customerId">Job Name</label>
+                                    <input type="text" class="form-control" id="job_name" formControlName="job_name">
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('job_name').disabled && !addBillForm.get('job_name').valid && (addBillForm.get('job_name').dirty || addBillForm.get('job_name').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="truck">Driver Id</label>
+                                    <input type="text" class="form-control" id="driver_id" formControlName="driver_id">
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('driver_id').disabled && !addBillForm.get('driver_id').valid && (addBillForm.get('driver_id').dirty || addBillForm.get('driver_id').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="customerId">Driver Name</label>
+                                    <input type="text" class="form-control" id="driver_name" formControlName="driver_name">
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('driver_name').disabled && !addBillForm.get('driver_name').valid && (addBillForm.get('driver_name').dirty || addBillForm.get('driver_name').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="truck_type">Truck Type</label>
+                                    <select id="truck_type" formControlName="truck_type" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top"
+                                        data-title="Truck Type">
+
+                                        <option *ngFor="let truckTypesdata of truckTypes;" value={{truckTypesdata.value}}>{{truckTypesdata.name}}</option>
+                                    </select>
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('truck_type').disabled && !addBillForm.get('truck_type').valid && (addBillForm.get('truck_type').dirty || addBillForm.get('truck_type').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="truck">Bill To</label>
+                                    <select id="billFrom" formControlName="bill_from" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top"
+                                        data-title="Bill From">
+                                        <option value=''>-- Select Bill From --</option>
+                                        <option value='amijot'>Amijot</option>
+                                        <option value='economy'>Economy</option>
+                                    </select>
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('bill_from').disabled && !addBillForm.get('bill_from').valid && (addBillForm.get('bill_from').dirty || addBillForm.get('bill_from').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="bill_type">Bill Type</label>
+                                    <select id="billType" formControlName="bill_type" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top"
+                                        data-title="Bill Type">
+                                        <option value="">-- Select Bill Type --</option>
+                                        <option *ngFor="let billAndPayType of billAndPayTypes;" value={{billAndPayType.value}}>{{billAndPayType.name}}</option>
+                                    </select>
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('bill_type').disabled && !addBillForm.get('bill_type').valid && (addBillForm.get('bill_type').dirty || addBillForm.get('bill_type').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="pay_type">Pay Type</label>
+                                    <select id="pay_type" formControlName="pay_type" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top"
+                                        data-title="Pay Type">
+                                        <option value="">-- Select Bill Type --</option>
+                                        <option *ngFor="let billAndPayType of billAndPayTypes;" value={{billAndPayType.value}}>{{billAndPayType.name}}</option>
+                                    </select>
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('pay_type').disabled && !addBillForm.get('pay_type').valid && (addBillForm.get('pay_type').dirty || addBillForm.get('pay_type').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="bill_type">Bill Minimum</label>
+                                    <input type="text" class="form-control" id="bill_minimum" formControlName="bill_minimum">
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('bill_minimum').disabled && !addBillForm.get('bill_minimum').valid && (addBillForm.get('bill_minimum').dirty || addBillForm.get('bill_minimum').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="pay_type">Pay Minimum</label>
+                                    <input type="text" class="form-control" id="pay_minimum" formControlName="pay_minimum">
+                                    <small class="form-text text-muted danger" *ngIf="!addBillForm.get('pay_minimum').disabled && !addBillForm.get('pay_minimum').valid && (addBillForm.get('pay_minimum').dirty || addBillForm.get('pay_minimum').touched)">Field is invalid</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <label for="bill_type">Bill</label>
+                                        <table class="table">
+                                            <thead class="thead-default">
+                                                <tr>
+                                                    <th>Type</th>
+                                                    <th>Quantity</th>
+                                                    <th>Rate</th>
+                                                    <th>Tax</th>
+                                                    <th>Gross</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody formArrayName="bill_details">
+                                                <tr *ngFor="let truck of addBillForm.get('bill_details').controls; let i = index;">
+                                                    <ng-container [formGroupName]="i">
+                                                        <td>
+                                                            <input formControlName="bill_type" type="label" class="form-control">
+
+                                                        </td>
+                                                        <td>
+                                                            <input formControlName="quantity" type="number" (keyup)="calculateGrossValue()" min="1" class="form-control" placeholder="eg: $0">
+
+                                                        </td>
+                                                        <td>
+                                                            <input formControlName="rate" type="number" (keyup)="calculateGrossValue()" min="1" class="form-control" placeholder="eg: $0">
+
+                                                        </td>
+                                                        <td>
+                                                            <input formControlName="tax" type="number"  min="1" class="form-control" placeholder="eg: $0">
+
+                                                        </td>
+                                                        <td>
+                                                            <input formControlName="gross" type="number" min="1" [ngStyle]="{ 'background-color': gross[i] }" class="form-control" placeholder="eg: $0">
+
+                                                        </td>
+                                                    </ng-container>
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                        <button type="buttton" (click)="_addBillTypeRow($event)" class="btn btn-success btn-raised">Add Bill Row</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="pay_type">Bill Total</label>
+                                <input type="text" class="form-control" id="bill_total" formControlName="bill_total">
+                                <small class="form-text text-muted danger" *ngIf="!addBillForm.get('bill_total').valid && (addBillForm.get('bill_total').dirty || addBillForm.get('bill_total').touched)">Field is invalid</small>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <label for="bill_type">Pay</label>
+                                        <table class="table">
+                                            <thead class="thead-default">
+                                                <tr>
+                                                    <th>Type</th>
+                                                    <th>Quantity</th>
+                                                    <th>Rate</th>
+                                                    <th>Tax</th>
+                                                    <th>Gross</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody formArrayName="pay_details">
+                                                <tr *ngFor="let truck of addBillForm.get('pay_details').controls; let i = index;">
+                                                    <ng-container [formGroupName]="i">
+                                                        <td>
+                                                            <input formControlName="pay_type" type="label" class="form-control">
+
+                                                        </td>
+                                                        <td>
+                                                            <input formControlName="quantity" type="number"   min="1" class="form-control" placeholder="eg: $0">
+
+                                                        </td>
+                                                        <td>
+                                                            <input formControlName="rate" type="number"  min="1" class="form-control" placeholder="eg: $0">
+
+                                                        </td>
+                                                        <td>
+                                                            <input formControlName="tax" type="number" min="1" class="form-control" placeholder="eg: $0">
+
+                                                        </td>
+                                                        <td>
+                                                            <input formControlName="gross" type="number" min="1" class="form-control" placeholder="eg: $0">
+
+                                                        </td>
+                                                    </ng-container>
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                        <button type="buttton" (click)="_addPayTypeRow($event)" class="btn btn-success btn-raised">Add Pay Row</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="pay_type">Pay Total</label>
+                                <input type="text" class="form-control" id="pay_total" formControlName="pay_total">
+                                <small class="form-text text-muted danger" *ngIf="!addBillForm.get('pay_total').valid && (addBillForm.get('pay_total').dirty || addBillForm.get('pay_total').touched)">Field is invalid</small>
+
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+
+                            </div>
+                            <div class="col-md-3">
+
+                            </div>
+                            <div class="col-md-4">
+                                <label for="pay_type">NET</label>
+                                <input type="text" class="form-control" id="net" formControlName="net">
+                                <small class="form-text text-muted danger" *ngIf="!addBillForm.get('net').valid && (addBillForm.get('net').dirty || addBillForm.get('net').touched)">Field is invalid</small>
+
+                            </div> 
+                            <div class="form-group">
+                                    <button class="btn btn-warning btn-raised pull-right ml-1" (click)='cancel()'>
+                                      <i class="ft-x"></i> Cancel
+                                    </button>
+                                    <button type="submit" class="btn btn-success btn-raised pull-right">
+                                      <i class="fa fa-check-square-o"></i>
+                                      Approve
+                                    </button>
+                                  </div>
+                        </div>
+                    
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
